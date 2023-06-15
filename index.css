@@ -1,0 +1,102 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: 'Changa', sans-serif;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    background: radial-gradient(rgba(var(--first), var(--second), var(--third), 1), rgba(var(--first), var(--second), var(--third), 0.8));
+    background-size: cover;
+    transition: 0s background-color;
+    line-height: 1.4;
+}
+
+input {
+    font-size: 7vmin;
+    padding: 0.3em;
+    border-radius: 0.5em;
+    border: 0;
+    box-shadow: 2px 2px 4px rgb(0 0 0 / 60%);
+    outline: 3px solid rgb(0 0 0 / 20%);
+    text-align: center;
+}
+
+input::placeholder {
+    opacity: 0.3;
+}
+
+.current-word {
+    font-size: 15vmin;
+    color: white;
+    text-shadow: 2px 2px 4px rgb(0 0 0 / 60%);
+    font-weight: 200;
+    animation: fontWeight 1.5s infinite alternate;
+}
+
+.current-word::before {
+    content: attr(data-current-word);
+}
+
+@keyframes fontWeight {
+    0% {
+        font-weight: 200;
+    }
+    100% {
+        font-weight: 500;
+    }
+}
+
+.score-container,
+.high-score-container {
+    position: absolute;
+    top: 2vmin;
+    color: white;
+    text-shadow: 2px 2px 4px rgb(0 0 0 / 60%);
+    font-weight: 400;
+}
+
+.high-score-container {
+    left: 3vmin;
+}
+
+.score-container {
+    right: 3vmin;
+    text-align: right;
+}
+
+.score-container h1,
+.high-score-container h1 {
+    margin: 0;
+    font-size: 4vmin;
+}
+
+.score {
+    font-size: 12vmin;
+    line-height: 1;
+}
+
+.score span {
+    position: relative;
+    display: inline-block;
+}
+
+.score span[style] {
+    animation: wave 0.5s forwards;
+    animation-delay: calc(.1s * var(--i));
+}
+
+@keyframes wave {
+    0%, 40%, 100% {
+        transform: translateY(0)
+    }
+    20% {
+        transform: translateY(-10px)
+    }
+}
