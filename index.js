@@ -10,7 +10,7 @@ function clearInput() {
 function wordIsTyped(inputValue) {
     const word = wordEl.getAttribute('data-current-word');
     const typedWord = inputValue.trim();
-    return word === typedWord;
+    return word.toLowerCase() === typedWord.toLowerCase();
 }
 
 function generateRandom() {
@@ -19,7 +19,7 @@ function generateRandom() {
 }
 
 function getAndSetNewWord() {
-    fetch('https://random-word-api.herokuapp.com/word')
+    fetch('https://random-word.ryanrk.com/api/en/word/random')
         .then(response => response.json())
         .then(wordArray => {
             const word = wordArray[0];
