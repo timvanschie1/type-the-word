@@ -7,27 +7,31 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Changa:wght@200..600&display=block" rel="stylesheet">
-    <title>Type the word!</title>
+    <title>Typ het woord!</title>
     <link rel="stylesheet" href="index.css">
 </head>
-<body style="--first: 0; --second: 0; --third: 0">
+<body style="--randomHue1: 0; --randomHue2: 0;">
 
-<!--
-WIP:
-<div class="high-score-container">
-    <h1>Highscore: [name]</h1>
-    <div class="score" data-high-score="[score]"><span>0</span></div>
+<div class="high-score-container hidden js-high-score-container">
+    <h1>Hoogste score <span class="js-high-score-date"></span></h1>
+    <div class="high-score js-high-score"></div>
 </div>
--->
 
-<div class="avatar-container"></div>
+<div class="count-down-container js-count-down-container">
+    <h1>Tijd</h1>
+    <div class="count-down js-count-down">60</div>
+</div>
 
 <div class="score-container">
-    <h1>Your score</h1>
-    <div class="score" data-score="0"><span>0</span></div>
+    <h1>Jouw score</h1>
+    <div class="score js-score" data-score="0"><span>0</span></div>
 </div>
-<div class="current-word" data-current-word="">&nbsp;</div>
-<input type="text" autofocus placeholder="Type the word">
+
+<div class="current-word-container js-current-word-container">
+    <div class="current-word js-current-word" data-current-word="">&nbsp;</div>
+    <input type="text" autofocus placeholder="Typ het woord">
+    <button class="hidden" onclick="location.reload()" type="button">Opnieuw!</button>
+</div>
 
 <script src="index.js"></script>
 </body>
