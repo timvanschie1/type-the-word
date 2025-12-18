@@ -36,7 +36,7 @@ function getAndShowNewWord() {
     .catch(err => console.error(err));
 }
 
-/** Set and show the highscore and date when it was obtained **/
+/** Set and show the highscore  **/
 function renewHighScore(score, timestamp) {
   highScore = score;
 
@@ -47,13 +47,6 @@ function renewHighScore(score, timestamp) {
   splittedHighScore.forEach((digit, i) => {
     highScoreEl.innerHTML = highScoreEl.innerHTML + `<span style="--i: ${i};">${digit}</span>`
   })
-
-  const dateEl = document.querySelector(".js-high-score-date");
-  dateEl.textContent = timestamp ? new Date(timestamp).toLocaleDateString('en-GB', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric'
-  }).replace(/\//g, '/') : '';
 
   document.querySelector(".js-high-score-container").classList.remove("hidden");
 }
@@ -67,7 +60,7 @@ function increaseScore() {
   scoreEl.setAttribute('data-score', currentScore);
 
   if (Number(currentScore) > Number(highScore)) {
-    renewHighScore(currentScore, new Date().toISOString());
+    renewHighScore(currentScore);
   }
 
   scoreEl.innerHTML = "";
@@ -89,8 +82,8 @@ inputEl.addEventListener('input', (e) => {
 /** Retrieve and show high score from local storage, if there is one **/
 const savedData = localStorage.getItem(HIGH_SCORE_KEY);
 if (savedData) {
-  const {score, timestamp} = JSON.parse(savedData);
-  renewHighScore(score, timestamp);
+  const {score} = JSON.parse(savedData);
+  renewHighScore(score);
 }
 
 /** Count down from 60 to 0 **/
@@ -112,7 +105,6 @@ const countDownTimer = setInterval(() => {
 window.addEventListener("beforeunload", () => {
   const highScoreData = {
     score: highScore,
-    timestamp: new Date().toISOString()
   };
 
   localStorage.setItem(HIGH_SCORE_KEY, JSON.stringify(highScoreData));
