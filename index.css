@@ -72,8 +72,6 @@ input {
 }
 
 button {
-    --color-1: oklch(70% 0.2 var(--randomHue1));
-    --color-2: oklch(70% 0.2 var(--randomHue2));
     padding-inline: 2em;
     cursor: pointer;
     border: 0.2em solid ;
