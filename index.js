@@ -1,4 +1,5 @@
 const HIGH_SCORE_KEY = 'type-the-word-high-score';
+
 let currentScore = 0;
 let highScore = 0;
 let secondsLeft = 60;
@@ -8,6 +9,34 @@ const scoreEl = document.querySelector('.js-score');
 const inputEl = document.querySelector('input');
 const tryAgainButton = document.querySelector('.js-current-word-container button');
 const bodyEl = document.querySelector('body');
+
+function shuffleArray(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+/** Get the collection of 10.000 Dutch words**/
+let words = [];
+fetch("wordsDutch.json")
+  .then(r => r.json())
+  .then(data => {
+    words = shuffleArray(data);
+    getAndShowNewWord();
+  });
+
+/** Get a random word from the list of 10.000 words **/
+let index = 0;
+function getRandomWord() {
+  if (index >= words.length) {
+    index = 0;
+    words = shuffleArray(words);
+  }
+  return words[index++];
+}
 
 /** Check if the user typed in the current random word **/
 function isWordTyped(inputValue) {
@@ -23,17 +52,12 @@ function getRandomHue() {
 
 /** Get and show a new random (often non-existing) word **/
 function getAndShowNewWord() {
-  fetch('https://random-word-api.herokuapp.com/word')
-    .then(response => response.json())
-    .then(wordArray => {
-      const word = wordArray[0];
-      wordEl.setAttribute('data-current-word', word);
+  const word = getRandomWord();
+  wordEl.setAttribute('data-current-word', word);
 
-      /** We also set two random Hues **/
-      bodyEl.style.setProperty("--randomHue1", getRandomHue());
-      bodyEl.style.setProperty("--randomHue2", getRandomHue());
-    })
-    .catch(err => console.error(err));
+  /** We also set two random Hues **/
+  bodyEl.style.setProperty("--randomHue1", getRandomHue());
+  bodyEl.style.setProperty("--randomHue2", getRandomHue());
 }
 
 /** Set and show the highscore  **/
@@ -109,5 +133,3 @@ window.addEventListener("beforeunload", () => {
 
   localStorage.setItem(HIGH_SCORE_KEY, JSON.stringify(highScoreData));
 });
-
-getAndShowNewWord();
