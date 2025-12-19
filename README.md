@@ -1,5 +1,10 @@
 # Type the Word
 
-Simple game: type random words as fast as you can.
+Simple game in Dutch: type random words as fast as you can.
 
-http://htmlpreview.github.io/?https://github.com/timvanschie1/type-the-word/blob/develop/index.html
+https://typhetwoord.netlify.app
+
+## Before pushing changes
+
+Before pushing changes to index.html or index.js, you can run `node bump-version` to increment the version number, so
+user don't get served the cached version.

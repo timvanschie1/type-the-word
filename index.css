@@ -8,26 +8,6 @@
     inherits: true;
 }
 
-@keyframes angleAnimation {
-    to {
-        --angle: 1turn;
-    }
-}
-
-@keyframes focus-animation {
-    0% {
-        outline-color: transparent;
-        outline-offset: 0;
-    }
-    10% {
-        outline-color: white;
-    }
-    100% {
-        outline-color: transparent;
-        outline-offset: 1rem;
-    }
-}
-
 body {
     /* Syntax: oklch(Lightness Chroma Hue) */
     /* We use the CSS variables as the Hue (the 3rd parameter) */
@@ -57,9 +37,52 @@ input[type='text'], button {
     border-radius: 0.5em;
     box-shadow: 2px 2px 4px rgb(0 0 0 / 60%);
     text-align: center;
-    min-height: 125px;
-    padding: 0.3em;
+    padding-inline: 0.3vmin;
+    min-height: 14vmin;
     font-size: 7vmin;
+}
+
+input[type="radio"] {
+    display: grid;
+    place-content: center;
+    margin: 0;
+    appearance: none;
+    background-color: #fff;
+    font: inherit;
+    color: currentColor;
+    width: 1.15em;
+    aspect-ratio: 1;
+    border: 0.15em solid currentColor;
+    border-radius: 50%;
+    transform: translateY(-0.075em);
+
+    &::before {
+        content: "";
+        width: 0.65em;
+        height: 0.65em;
+        border-radius: 50%;
+        transform: scale(0);
+        transition: 120ms transform ease-in-out;
+        box-shadow: inset 1em 1em #444;
+    }
+
+    &:checked::before {
+        transform: scale(1);
+    }
+}
+
+input[type='radio'],
+input[type='radio'] + label {
+    cursor: pointer;
+}
+
+input[type='radio'] + label {
+    padding-left: 0.5em;
+}
+
+h1 {
+    margin: 0;
+    font-size: 4vmin;
 }
 
 input[type='text'] {
@@ -103,7 +126,7 @@ button {
 
     .current-word-icon {
         margin-bottom: -0.5em;
-        height: 12vmin;
+        height: 17vmin;
         width: auto;
         filter: invert(100%) drop-shadow(2px 2px 4px rgb(0 0 0 / 60%));
     }
@@ -134,59 +157,54 @@ button {
     }
 }
 
-.score-container,
+.high-score-container,
 .count-down-container,
-.high-score-container {
+.score-container,
+.mode-container {
     position: absolute;
-    top: 2vmin;
     color: white;
     font-weight: 400;
+}
 
-    h1 {
-        margin: 0;
-        font-size: 4vmin;
-    }
+.high-score,
+.count-down,
+.score {
+    font-size: 12vmin;
+    line-height: 1;
 
-    .high-score,
-    .count-down,
-    .score {
-        font-size: 12vmin;
-        line-height: 1;
+    span {
+        position: relative;
+        display: inline-block;
 
-        span {
-            position: relative;
-            display: inline-block;
-
-            &[style] {
-                animation: wave 0.5s forwards;
-                animation-delay: calc(.1s * var(--i));
-            }
+        &[style] {
+            animation: wave 0.5s forwards;
+            animation-delay: calc(.1s * var(--i));
         }
     }
 }
 
 .high-score-container {
+    top: 2vmin;
     left: 3vmin;
 }
 
 .count-down-container {
+    top: 2vmin;
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
 }
 
 .score-container {
+    top: 2vmin;
     right: 3vmin;
     text-align: right;
 }
 
 .mode-container {
-    position: absolute;
     bottom: 2vmin;
     left: 3vmin;
-    color: white;
     font-size: 3vmin;
-    font-weight: 400;
 
     .option {
         display: flex;
@@ -196,44 +214,6 @@ button {
             margin-top: 0.5em;
         }
     }
-
-    input {
-        display: grid;
-        place-content: center;
-        margin: 0;
-        appearance: none;
-        background-color: #fff;
-        font: inherit;
-        color: currentColor;
-        width: 1.15em;
-        aspect-ratio: 1;
-        border: 0.15em solid currentColor;
-        border-radius: 50%;
-        transform: translateY(-0.075em);
-
-        &::before {
-            content: "";
-            width: 0.65em;
-            height: 0.65em;
-            border-radius: 50%;
-            transform: scale(0);
-            transition: 120ms transform ease-in-out;
-            box-shadow: inset 1em 1em black;
-        }
-
-        &:checked::before {
-            transform: scale(1);
-        }
-    }
-
-    input,
-    label {
-        cursor: pointer;
-    }
-
-    label {
-        padding-left: 0.5em;
-    }
 }
 
 @keyframes wave {
@@ -242,5 +222,25 @@ button {
     }
     20% {
         transform: translateY(-10px)
+    }
+}
+
+@keyframes angleAnimation {
+    to {
+        --angle: 1turn;
+    }
+}
+
+@keyframes focus-animation {
+    0% {
+        outline-color: transparent;
+        outline-offset: 0;
+    }
+    10% {
+        outline-color: white;
+    }
+    100% {
+        outline-color: transparent;
+        outline-offset: 1rem;
     }
 }

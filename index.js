@@ -34,7 +34,7 @@ function shuffleArray(arr) {
 
 /** Get the collection of 10.000 Dutch kids friendly words **/
 let wordItems = [];
-fetch(mode === 'standard' ? "wordsDutch.json" : 'wordsPerIcon.json')
+fetch(mode === 'standard' ? "wordsDutch.json?v=2" : 'wordsPerIcon.json?v=2')
   .then(r => r.json())
   .then(data => wordItems = shuffleArray(data));
 
