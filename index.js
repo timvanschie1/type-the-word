@@ -109,7 +109,7 @@ if (savedData) {
 
 /** Count down from 60 to 0 **/
 function startCountDown() {
-  let secondsLeft = 5;
+  let secondsLeft = 60;
   countDownEl.textContent = secondsLeft.toString();
 
   const countDownInterval = setInterval(() => {
