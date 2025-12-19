@@ -96,7 +96,17 @@ button {
 }
 
 .current-word-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
+
+    .current-word-icon {
+        margin-bottom: -0.5em;
+        height: 12vmin;
+        width: auto;
+        filter: invert(100%) drop-shadow(2px 2px 4px rgb(0 0 0 / 60%));
+    }
 
     .current-word {
         font-size: 15vmin;

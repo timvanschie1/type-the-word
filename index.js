@@ -6,6 +6,7 @@ let currentScore = 0;
 let highScore = 0;
 
 const wordEl = document.querySelector('.js-current-word');
+const wordIconEl = document.querySelector('.js-current-word-icon');
 const inputEl = document.querySelector('input');
 const startButtonEl = document.querySelector('.js-start-button');
 const retryButtonEl = document.querySelector('.js-retry-button');
@@ -61,6 +62,11 @@ function getAndShowNewWord() {
   const {word, icon} = getWordAndIcon(shuffleArray(wordItems)[0]);
   wordEl.setAttribute('data-current-word', word);
 
+  if (icon) {
+    wordIconEl.src = `icons/${icon}.svg`;
+    wordIconEl.classList.remove('hidden');
+  }
+
   /** We also set two random Hues **/
   bodyEl.style.setProperty("--randomHue1", getRandomHue());
   bodyEl.style.setProperty("--randomHue2", getRandomHue());
@@ -110,7 +116,7 @@ if (savedHighScoreData) {
 
 /** Count down from 60 to 0 **/
 function startCountDown() {
-  let secondsLeft = 60;
+  let secondsLeft = mode === 'standard' ? 60 : 120;
   countDownEl.textContent = secondsLeft.toString();
 
   const countDownInterval = setInterval(() => {
