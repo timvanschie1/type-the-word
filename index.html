@@ -18,20 +18,23 @@
     <div class="high-score js-high-score"></div>
 </div>
 
-<div class="count-down-container js-count-down-container">
+<div class="count-down-container hidden js-count-down-container">
     <h1>Tijd</h1>
-    <div class="count-down js-count-down">60</div>
+    <div class="count-down js-count-down">0</div>
 </div>
 
-<div class="score-container">
+<div class="score-container js-score-container hidden">
     <h1>Jouw score</h1>
-    <div class="score js-score" data-score="0"><span>0</span></div>
+    <div class="score js-score"><span>0</span></div>
 </div>
 
 <div class="current-word-container js-current-word-container">
-    <div class="current-word js-current-word" data-current-word="">&nbsp;</div>
-    <input type="text" autofocus placeholder="Typ het woord">
-    <button class="hidden" onclick="location.reload()" type="button">Opnieuw!</button>
+    <div class="current-word js-current-word" data-current-word="Ready?"></div>
+    <button class="js-start-button" type="button" autofocus>Go!</button>
+
+    <input class="hidden" type="text" autofocus placeholder="Typ het woord">
+
+    <button class="hidden js-retry-button" type="button">Opnieuw!</button>
 </div>
 
 <script src="index.js"></script>

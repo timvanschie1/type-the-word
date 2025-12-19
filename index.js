@@ -2,12 +2,17 @@ const HIGH_SCORE_KEY = 'type-the-word-high-score';
 
 let currentScore = 0;
 let highScore = 0;
-let secondsLeft = 60;
 
 const wordEl = document.querySelector('.js-current-word');
-const scoreEl = document.querySelector('.js-score');
 const inputEl = document.querySelector('input');
-const tryAgainButton = document.querySelector('.js-current-word-container button');
+const startButtonEl = document.querySelector('.js-start-button');
+const retryButtonEl = document.querySelector('.js-retry-button');
+
+const countDownContainerEl = document.querySelector('.js-count-down-container');
+const countDownEl = document.querySelector('.js-count-down');
+const scoreContainerEl = document.querySelector('.js-score-container');
+const scoreEl = document.querySelector('.js-score');
+
 const bodyEl = document.querySelector('body');
 
 function shuffleArray(arr) {
@@ -19,17 +24,17 @@ function shuffleArray(arr) {
   return a;
 }
 
-/** Get the collection of 10.000 Dutch words**/
+/** Get the collection of 10.000 Dutch kids friendly words **/
 let words = [];
 fetch("wordsDutch.json")
   .then(r => r.json())
   .then(data => {
     words = shuffleArray(data);
-    getAndShowNewWord();
   });
 
 /** Get a random word from the list of 10.000 words **/
 let index = 0;
+
 function getRandomWord() {
   if (index >= words.length) {
     index = 0;
@@ -61,11 +66,11 @@ function getAndShowNewWord() {
 }
 
 /** Set and show the highscore  **/
-function renewHighScore(score, timestamp) {
+function renewHighScore(score) {
   highScore = score;
 
   const highScoreEl = document.querySelector(".js-high-score");
-  const splittedHighScore = score.split("");
+  const splittedHighScore = score.toString().split("");
 
   highScoreEl.innerHTML = "";
   splittedHighScore.forEach((digit, i) => {
@@ -75,33 +80,25 @@ function renewHighScore(score, timestamp) {
   document.querySelector(".js-high-score-container").classList.remove("hidden");
 }
 
-/** Increase and show the score (and if needed also the highscore) **/
-function increaseScore() {
-  const oldScore = Number(scoreEl.getAttribute('data-score'));
-  const newScore = oldScore + wordEl.getAttribute('data-current-word').length * 10;
-
-  currentScore = newScore.toString()
-  scoreEl.setAttribute('data-score', currentScore);
-
-  if (Number(currentScore) > Number(highScore)) {
-    renewHighScore(currentScore);
-  }
-
+function setScore(score) {
+  currentScore = score;
   scoreEl.innerHTML = "";
-  const splittedScore = currentScore.split("");
+  const splittedScore = score.toString().split("");
   splittedScore.forEach((digit, i) => {
     scoreEl.innerHTML = scoreEl.innerHTML + `<span style="--i: ${i};">${digit}</span>`
   })
 }
 
-/** Handle every keystroke in the input field **/
-inputEl.addEventListener('input', (e) => {
-  if (!isWordTyped(e.target.value)) return;
-  if (!secondsLeft) return;
-  increaseScore();
-  getAndShowNewWord();
-  inputEl.value = '';
-})
+/** Increase and show the score (and if needed also the highscore) **/
+function increaseScore() {
+  const newScore = currentScore + wordEl.getAttribute('data-current-word').length * 10;
+
+  setScore(newScore);
+
+  if (newScore > Number(highScore)) {
+    renewHighScore(newScore);
+  }
+}
 
 /** Retrieve and show high score from local storage, if there is one **/
 const savedData = localStorage.getItem(HIGH_SCORE_KEY);
@@ -111,19 +108,33 @@ if (savedData) {
 }
 
 /** Count down from 60 to 0 **/
-const countDownTimer = setInterval(() => {
-  secondsLeft--;
+function startCountDown() {
+  let secondsLeft = 5;
+  countDownEl.textContent = secondsLeft.toString();
 
-  document.querySelector('.js-count-down').textContent = secondsLeft.toString();
+  const countDownInterval = setInterval(() => {
+    secondsLeft--;
 
-  if (secondsLeft <= 0) {
-    wordEl.setAttribute('data-current-word', "Nog eens?");
-    inputEl.classList.add('hidden');
-    tryAgainButton.classList.remove('hidden');
-    tryAgainButton.focus();
-    clearInterval(countDownTimer);
-  }
-}, 1000);
+    countDownEl.textContent = secondsLeft.toString();
+
+    if (secondsLeft === 0) {
+      wordEl.setAttribute('data-current-word', "Nog eens?");
+      inputEl.classList.add('hidden');
+      retryButtonEl.classList.remove('hidden');
+      retryButtonEl.focus();
+      clearInterval(countDownInterval);
+    }
+  }, 1000);
+}
+
+/** Handle every keystroke in the input field **/
+inputEl.addEventListener('input', (e) => {
+  if (!isWordTyped(e.target.value)) return;
+
+  increaseScore();
+  getAndShowNewWord();
+  inputEl.value = '';
+})
 
 /** Save high score, right before the page closes **/
 window.addEventListener("beforeunload", () => {
@@ -133,3 +144,23 @@ window.addEventListener("beforeunload", () => {
 
   localStorage.setItem(HIGH_SCORE_KEY, JSON.stringify(highScoreData));
 });
+
+function reset() {
+  startCountDown();
+  setScore(0);
+  getAndShowNewWord();
+
+  [countDownContainerEl, scoreContainerEl, inputEl].forEach(el => {
+    el.classList.remove('hidden')
+  });
+
+  [startButtonEl, retryButtonEl].forEach(el => {
+    el.classList.add('hidden')
+  });
+
+  inputEl.value = '';
+  inputEl.focus();
+}
+
+startButtonEl.addEventListener('click', reset);
+retryButtonEl.addEventListener('click', reset);
