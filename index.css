@@ -124,11 +124,19 @@ button {
     align-items: center;
     text-align: center;
 
-    .current-word-icon {
-        margin-bottom: -0.5em;
-        height: 17vmin;
+    .current-word-image {
         width: auto;
-        filter: invert(100%) drop-shadow(2px 2px 4px rgb(0 0 0 / 60%));
+
+        &[src*='.svg'] {
+            margin-bottom: -0.5em;
+            filter: invert(100%) drop-shadow(2px 2px 4px rgb(0 0 0 / 60%));
+            height: 17vmin;
+        }
+
+        &[src*='.webp'] {
+            height: 36vmin;
+            filter: drop-shadow(2px 2px 4px rgb(0 0 0 / 60%));
+        }
     }
 
     .current-word {
@@ -140,6 +148,10 @@ button {
 
         &::before {
             content: attr(data-current-word);
+        }
+
+        .current-word-image[src*='.webp'] + & {
+            font-size: 10vmin;
         }
     }
 
@@ -164,6 +176,16 @@ button {
     position: absolute;
     color: white;
     font-weight: 400;
+}
+
+body:has(img[src*='.webp']) .count-down-container {
+    h1 {
+        font-size: 3vmin;
+    }
+
+    .count-down {
+        font-size: 9vmin;
+    }
 }
 
 .high-score,

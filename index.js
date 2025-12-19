@@ -1,12 +1,13 @@
 const MODE_KEY = 'type-the-word-mode';
 const HIGH_SCORE_KEY_STANDARD = 'type-the-word-high-score';
 const HIGH_SCORE_KEY_YOUNGKIDS = 'type-the-word-high-score-young-kids';
+const HIGH_SCORE_KEY_BRAINROT = 'type-the-word-high-score-brainrot';
 
 let currentScore = 0;
 let highScore = 0;
 
 const wordEl = document.querySelector('.js-current-word');
-const wordIconEl = document.querySelector('.js-current-word-icon');
+const wordImageEl = document.querySelector('.js-current-word-image');
 const inputEl = document.querySelector('input');
 const startButtonEl = document.querySelector('.js-start-button');
 const retryButtonEl = document.querySelector('.js-retry-button');
@@ -21,9 +22,15 @@ const bodyEl = document.querySelector('body');
 
 const mode = localStorage.getItem(MODE_KEY) ? JSON.parse(localStorage.getItem(MODE_KEY)) : 'standard';
 document.querySelector(`input[value="${mode}"]`).checked = true;
-const highScoreKey = mode === 'standard' ? HIGH_SCORE_KEY_STANDARD : HIGH_SCORE_KEY_YOUNGKIDS;
 
-function shuffleArray(arr) {
+let highScoreKey = HIGH_SCORE_KEY_STANDARD;
+if (mode === 'brainrot') {
+  highScoreKey = HIGH_SCORE_KEY_BRAINROT;
+} else if (mode === 'youngKids') {
+  highScoreKey = HIGH_SCORE_KEY_YOUNGKIDS;
+}
+
+function getShuffledArray(arr) {
   const a = arr.slice();
   for (let i = a.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -32,11 +39,26 @@ function shuffleArray(arr) {
   return a;
 }
 
+function getArrayShiftAndPushed(arr) {
+  arr.push(arr.shift())
+  return arr;
+}
+
 /** Get the collection of 10.000 Dutch kids friendly words **/
 let wordItems = [];
-fetch(mode === 'standard' ? "wordsDutch.json?v=2" : 'wordsPerIcon.json?v=2')
+
+let fileName = "wordsDutch.json?v=2";
+if (mode === 'youngKids') {
+  fileName = 'wordsPerImageYoungKids.json?v=2';
+} else if (mode === 'brainrot') {
+  fileName = 'wordsPerImageBrainrot.json?v=2';
+}
+
+fetch(fileName)
   .then(r => r.json())
-  .then(data => wordItems = shuffleArray(data));
+  .then(data => {
+    wordItems = mode === 'brainrot' ? data : getShuffledArray(data)
+  });
 
 /** Check if the user typed in the current random word **/
 function isWordTyped(inputValue) {
@@ -50,7 +72,7 @@ function getRandomHue() {
   return Math.floor(Math.random() * 361).toString(); // Hue ranges from 0 to 360
 }
 
-function getWordAndIcon(item) {
+function getWordAndImage(item) {
   if (mode === 'standard') {
     return {word: item}
   }
@@ -59,12 +81,13 @@ function getWordAndIcon(item) {
 
 /** Get and show a new random word **/
 function getAndShowNewWord() {
-  const {word, icon} = getWordAndIcon(shuffleArray(wordItems)[0]);
+  const array = mode === 'brainrot' ? getArrayShiftAndPushed(wordItems) : getShuffledArray(wordItems);
+  const {word, image} = getWordAndImage(array[0]);
   wordEl.setAttribute('data-current-word', word);
 
-  if (icon) {
-    wordIconEl.src = `icons/${icon}.svg`;
-    wordIconEl.classList.remove('hidden');
+  if (image) {
+    wordImageEl.src = mode === 'youngKids' ? `images/icons/${image}.svg` : `images/brainrot/${image}.webp`;
+    wordImageEl.classList.remove('hidden');
   }
 
   /** We also set two random Hues **/
@@ -116,7 +139,7 @@ if (savedHighScoreData) {
 
 /** Count down from 60 to 0 **/
 function startCountDown() {
-  let secondsLeft = mode === 'standard' ? 60 : 120;
+  let secondsLeft = mode === 'youngKids' ? 120 : 60;
   countDownEl.textContent = secondsLeft.toString();
 
   const countDownInterval = setInterval(() => {
