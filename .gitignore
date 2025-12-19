@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+build-kids-friendly-words.js
+wordlist.txt
