@@ -1,0 +1,590 @@
+[
+  {
+    "icon": "airplane",
+    "word": "vliegtuig"
+  },
+  {
+    "icon": "alarm",
+    "word": "alarm"
+  },
+  {
+    "icon": "ambulance",
+    "word": "ambulance"
+  },
+  {
+    "icon": "armchair",
+    "word": "stoel"
+  },
+  {
+    "icon": "baby",
+    "word": "baby"
+  },
+  {
+    "icon": "backpack",
+    "word": "rugzak"
+  },
+  {
+    "icon": "bag",
+    "word": "tas"
+  },
+  {
+    "icon": "balloon",
+    "word": "ballon"
+  },
+  {
+    "icon": "bathtub",
+    "word": "bad"
+  },
+  {
+    "icon": "bed",
+    "word": "bed"
+  },
+  {
+    "icon": "bell",
+    "word": "bel"
+  },
+  {
+    "icon": "bicycle",
+    "word": "fiets"
+  },
+  {
+    "icon": "bird",
+    "word": "vogel"
+  },
+  {
+    "icon": "boat",
+    "word": "boot"
+  },
+  {
+    "icon": "bone",
+    "word": "bot"
+  },
+  {
+    "icon": "book",
+    "word": "boek"
+  },
+  {
+    "icon": "books",
+    "word": "boeken"
+  },
+  {
+    "icon": "boot",
+    "word": "laars"
+  },
+  {
+    "icon": "bread",
+    "word": "brood"
+  },
+  {
+    "icon": "briefcase",
+    "word": "tas"
+  },
+  {
+    "icon": "bug",
+    "word": "insect"
+  },
+  {
+    "icon": "building",
+    "word": "gebouw"
+  },
+  {
+    "icon": "bus",
+    "word": "bus"
+  },
+  {
+    "icon": "butterfly",
+    "word": "vlinder"
+  },
+  {
+    "icon": "cactus",
+    "word": "cactus"
+  },
+  {
+    "icon": "cake",
+    "word": "taart"
+  },
+  {
+    "icon": "calculator",
+    "word": "rekenmachine"
+  },
+  {
+    "icon": "camera",
+    "word": "camera"
+  },
+  {
+    "icon": "campfire",
+    "word": "vuur"
+  },
+  {
+    "icon": "car",
+    "word": "auto"
+  },
+  {
+    "icon": "carrot",
+    "word": "wortel"
+  },
+  {
+    "icon": "cash-register",
+    "word": "kassa"
+  },
+  {
+    "icon": "cat",
+    "word": "kat"
+  },
+  {
+    "icon": "chair",
+    "word": "stoel"
+  },
+  {
+    "icon": "cheese",
+    "word": "kaas"
+  },
+  {
+    "icon": "cherries",
+    "word": "kersen"
+  },
+  {
+    "icon": "church",
+    "word": "kerk"
+  },
+  {
+    "icon": "circle",
+    "word": "cirkel"
+  },
+  {
+    "icon": "city",
+    "word": "stad"
+  },
+  {
+    "icon": "cloud",
+    "word": "wolk"
+  },
+  {
+    "icon": "coffee",
+    "word": "koffie"
+  },
+  {
+    "icon": "coin",
+    "word": "munt"
+  },
+  {
+    "icon": "cookie",
+    "word": "koekje"
+  },
+  {
+    "icon": "couch",
+    "word": "bank"
+  },
+  {
+    "icon": "cow",
+    "word": "koe"
+  },
+  {
+    "icon": "crane",
+    "word": "kraan"
+  },
+  {
+    "icon": "cross",
+    "word": "kruis"
+  },
+  {
+    "icon": "crown",
+    "word": "kroon"
+  },
+  {
+    "icon": "cube",
+    "word": "blok"
+  },
+  {
+    "icon": "diamond",
+    "word": "diamant"
+  },
+  {
+    "icon": "dog",
+    "word": "hond"
+  },
+  {
+    "icon": "door",
+    "word": "deur"
+  },
+  {
+    "icon": "dress",
+    "word": "jurk"
+  },
+  {
+    "icon": "ear",
+    "word": "oor"
+  },
+  {
+    "icon": "egg",
+    "word": "ei"
+  },
+  {
+    "icon": "engine",
+    "word": "motor"
+  },
+  {
+    "icon": "envelope",
+    "word": "envelop"
+  },
+  {
+    "icon": "eye",
+    "word": "oog"
+  },
+  {
+    "icon": "farm",
+    "word": "boerderij"
+  },
+  {
+    "icon": "feather",
+    "word": "veer"
+  },
+  {
+    "icon": "fire",
+    "word": "vuur"
+  },
+  {
+    "icon": "fish",
+    "word": "vis"
+  },
+  {
+    "icon": "flag",
+    "word": "vlag"
+  },
+  {
+    "icon": "flame",
+    "word": "vlam"
+  },
+  {
+    "icon": "flashlight",
+    "word": "zaklamp"
+  },
+  {
+    "icon": "flower",
+    "word": "bloem"
+  },
+  {
+    "icon": "football",
+    "word": "voetbal"
+  },
+  {
+    "icon": "garage",
+    "word": "garage"
+  },
+  {
+    "icon": "goggles",
+    "word": "bril"
+  },
+  {
+    "icon": "guitar",
+    "word": "gitaar"
+  },
+  {
+    "icon": "hamburger",
+    "word": "hamburger"
+  },
+  {
+    "icon": "hammer",
+    "word": "hamer"
+  },
+  {
+    "icon": "hand",
+    "word": "hand"
+  },
+  {
+    "icon": "handbag",
+    "word": "tas"
+  },
+  {
+    "icon": "heart",
+    "word": "hart"
+  },
+  {
+    "icon": "horse",
+    "word": "paard"
+  },
+  {
+    "icon": "hospital",
+    "word": "ziekenhuis"
+  },
+  {
+    "icon": "house",
+    "word": "huis"
+  },
+  {
+    "icon": "ice-cream",
+    "word": "ijs"
+  },
+  {
+    "icon": "island",
+    "word": "eiland"
+  },
+  {
+    "icon": "knife",
+    "word": "mes"
+  },
+  {
+    "icon": "ladder",
+    "word": "ladder"
+  },
+  {
+    "icon": "lamp",
+    "word": "lamp"
+  },
+  {
+    "icon": "laptop",
+    "word": "laptop"
+  },
+  {
+    "icon": "leaf",
+    "word": "blad"
+  },
+  {
+    "icon": "lego",
+    "word": "lego"
+  },
+  {
+    "icon": "magnet",
+    "word": "magneet"
+  },
+  {
+    "icon": "medal",
+    "word": "medaille"
+  },
+  {
+    "icon": "moon",
+    "word": "maan"
+  },
+  {
+    "icon": "motorcycle",
+    "word": "motor"
+  },
+  {
+    "icon": "mountains",
+    "word": "bergen"
+  },
+  {
+    "icon": "newspaper",
+    "word": "krant"
+  },
+  {
+    "icon": "orange",
+    "word": "sinaasappel"
+  },
+  {
+    "icon": "oven",
+    "word": "oven"
+  },
+  {
+    "icon": "pants",
+    "word": "broek"
+  },
+  {
+    "icon": "park",
+    "word": "park"
+  },
+  {
+    "icon": "pen",
+    "word": "pen"
+  },
+  {
+    "icon": "pencil",
+    "word": "potlood"
+  },
+  {
+    "icon": "pill",
+    "word": "pil"
+  },
+  {
+    "icon": "pizza",
+    "word": "pizza"
+  },
+  {
+    "icon": "planet",
+    "word": "planeet"
+  },
+  {
+    "icon": "popcorn",
+    "word": "popcorn"
+  },
+  {
+    "icon": "printer",
+    "word": "printer"
+  },
+  {
+    "icon": "puzzle-piece",
+    "word": "puzzel"
+  },
+  {
+    "icon": "rabbit",
+    "word": "konijn"
+  },
+  {
+    "icon": "radio",
+    "word": "radio"
+  },
+  {
+    "icon": "rainbow",
+    "word": "regenboog"
+  },
+  {
+    "icon": "rectangle",
+    "word": "rechthoek"
+  },
+  {
+    "icon": "robot",
+    "word": "robot"
+  },
+  {
+    "icon": "rocket",
+    "word": "raket"
+  },
+  {
+    "icon": "sailboat",
+    "word": "zeilboot"
+  },
+  {
+    "icon": "scooter",
+    "word": "step"
+  },
+  {
+    "icon": "seat",
+    "word": "stoel"
+  },
+  {
+    "icon": "shovel",
+    "word": "schep"
+  },
+  {
+    "icon": "shower",
+    "word": "douche"
+  },
+  {
+    "icon": "soccer-ball",
+    "word": "bal"
+  },
+  {
+    "icon": "square",
+    "word": "vierkant"
+  },
+  {
+    "icon": "stairs",
+    "word": "trap"
+  },
+  {
+    "icon": "stamp",
+    "word": "postzegel"
+  },
+  {
+    "icon": "star",
+    "word": "ster"
+  },
+  {
+    "icon": "steering-wheel",
+    "word": "stuur"
+  },
+  {
+    "icon": "sun",
+    "word": "zon"
+  },
+  {
+    "icon": "sunglasses",
+    "word": "zonnebril"
+  },
+  {
+    "icon": "swimming-pool",
+    "word": "zwembad"
+  },
+  {
+    "icon": "sword",
+    "word": "zwaard"
+  },
+  {
+    "icon": "t-shirt",
+    "word": "shirt"
+  },
+  {
+    "icon": "table",
+    "word": "tafel"
+  },
+  {
+    "icon": "television",
+    "word": "televisie"
+  },
+  {
+    "icon": "tennis-ball",
+    "word": "bal"
+  },
+  {
+    "icon": "tent",
+    "word": "tent"
+  },
+  {
+    "icon": "toilet",
+    "word": "wc"
+  },
+  {
+    "icon": "tooth",
+    "word": "tand"
+  },
+  {
+    "icon": "towel",
+    "word": "handdoek"
+  },
+  {
+    "icon": "tractor",
+    "word": "tractor"
+  },
+  {
+    "icon": "train",
+    "word": "trein"
+  },
+  {
+    "icon": "tram",
+    "word": "tram"
+  },
+  {
+    "icon": "trash",
+    "word": "vuilnis"
+  },
+  {
+    "icon": "tree",
+    "word": "boom"
+  },
+  {
+    "icon": "triangle",
+    "word": "driehoek"
+  },
+  {
+    "icon": "trolley",
+    "word": "kar"
+  },
+  {
+    "icon": "truck",
+    "word": "vrachtwagen"
+  },
+  {
+    "icon": "umbrella",
+    "word": "paraplu"
+  },
+  {
+    "icon": "union",
+    "word": "vlag"
+  },
+  {
+    "icon": "van",
+    "word": "busje"
+  },
+  {
+    "icon": "video-camera",
+    "word": "camera"
+  },
+  {
+    "icon": "watch",
+    "word": "horloge"
+  },
+  {
+    "icon": "waves",
+    "word": "golven"
+  }
+]

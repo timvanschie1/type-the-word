@@ -51,7 +51,7 @@ body {
     animation: angleAnimation 5s infinite linear;
 }
 
-input, button {
+input[type='text'], button {
     font-family: inherit;
     line-height: inherit;
     border-radius: 0.5em;
@@ -62,7 +62,7 @@ input, button {
     font-size: 7vmin;
 }
 
-input {
+input[type='text'] {
     border: 0;
     outline: 3px solid rgb(0 0 0 / 20%);
 
@@ -74,7 +74,7 @@ input {
 button {
     padding-inline: 2em;
     cursor: pointer;
-    border: 0.2em solid ;
+    border: 0.2em solid;
     font-weight: 900;
     color: white;
     text-shadow: inherit;
@@ -135,15 +135,6 @@ button {
     h1 {
         margin: 0;
         font-size: 4vmin;
-
-        span {
-            display: none;
-
-            @media (min-width: 768px) {
-                display: inline;
-                font-size: 1rem;
-            }
-        }
     }
 
     .high-score,
@@ -177,6 +168,62 @@ button {
 .score-container {
     right: 3vmin;
     text-align: right;
+}
+
+.mode-container {
+    position: absolute;
+    bottom: 2vmin;
+    left: 3vmin;
+    color: white;
+    font-size: 3vmin;
+    font-weight: 400;
+
+    .option {
+        display: flex;
+        align-items: center;
+
+        + .option {
+            margin-top: 0.5em;
+        }
+    }
+
+    input {
+        display: grid;
+        place-content: center;
+        margin: 0;
+        appearance: none;
+        background-color: #fff;
+        font: inherit;
+        color: currentColor;
+        width: 1.15em;
+        aspect-ratio: 1;
+        border: 0.15em solid currentColor;
+        border-radius: 50%;
+        transform: translateY(-0.075em);
+
+        &::before {
+            content: "";
+            width: 0.65em;
+            height: 0.65em;
+            border-radius: 50%;
+            transform: scale(0);
+            transition: 120ms transform ease-in-out;
+            box-shadow: inset 1em 1em black;
+        }
+
+        &:checked::before {
+            transform: scale(1);
+        }
+    }
+
+    input,
+    label {
+        cursor: pointer;
+    }
+
+    label {
+        padding-left: 0.5em;
+    }
 }
 
 @keyframes wave {

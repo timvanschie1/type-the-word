@@ -1,4 +1,6 @@
-const HIGH_SCORE_KEY = 'type-the-word-high-score';
+const MODE_KEY = 'type-the-word-mode';
+const HIGH_SCORE_KEY_STANDARD = 'type-the-word-high-score';
+const HIGH_SCORE_KEY_YOUNGKIDS = 'type-the-word-high-score-young-kids';
 
 let currentScore = 0;
 let highScore = 0;
@@ -7,6 +9,7 @@ const wordEl = document.querySelector('.js-current-word');
 const inputEl = document.querySelector('input');
 const startButtonEl = document.querySelector('.js-start-button');
 const retryButtonEl = document.querySelector('.js-retry-button');
+const modeRadioButtons = document.querySelectorAll('.js-mode-container input[type="radio"]');
 
 const countDownContainerEl = document.querySelector('.js-count-down-container');
 const countDownEl = document.querySelector('.js-count-down');
@@ -14,6 +17,10 @@ const scoreContainerEl = document.querySelector('.js-score-container');
 const scoreEl = document.querySelector('.js-score');
 
 const bodyEl = document.querySelector('body');
+
+const mode = localStorage.getItem(MODE_KEY) ? JSON.parse(localStorage.getItem(MODE_KEY)) : 'standard';
+document.querySelector(`input[value="${mode}"]`).checked = true;
+const highScoreKey = mode === 'standard' ? HIGH_SCORE_KEY_STANDARD : HIGH_SCORE_KEY_YOUNGKIDS;
 
 function shuffleArray(arr) {
   const a = arr.slice();
@@ -25,23 +32,10 @@ function shuffleArray(arr) {
 }
 
 /** Get the collection of 10.000 Dutch kids friendly words **/
-let words = [];
-fetch("wordsDutch.json")
+let wordItems = [];
+fetch(mode === 'standard' ? "wordsDutch.json" : 'wordsPerIcon.json')
   .then(r => r.json())
-  .then(data => {
-    words = shuffleArray(data);
-  });
-
-/** Get a random word from the list of 10.000 words **/
-let index = 0;
-
-function getRandomWord() {
-  if (index >= words.length) {
-    index = 0;
-    words = shuffleArray(words);
-  }
-  return words[index++];
-}
+  .then(data => wordItems = shuffleArray(data));
 
 /** Check if the user typed in the current random word **/
 function isWordTyped(inputValue) {
@@ -55,9 +49,16 @@ function getRandomHue() {
   return Math.floor(Math.random() * 361).toString(); // Hue ranges from 0 to 360
 }
 
-/** Get and show a new random (often non-existing) word **/
+function getWordAndIcon(item) {
+  if (mode === 'standard') {
+    return {word: item}
+  }
+  return item;
+}
+
+/** Get and show a new random word **/
 function getAndShowNewWord() {
-  const word = getRandomWord();
+  const {word, icon} = getWordAndIcon(shuffleArray(wordItems)[0]);
   wordEl.setAttribute('data-current-word', word);
 
   /** We also set two random Hues **/
@@ -101,9 +102,9 @@ function increaseScore() {
 }
 
 /** Retrieve and show high score from local storage, if there is one **/
-const savedData = localStorage.getItem(HIGH_SCORE_KEY);
-if (savedData) {
-  const {score} = JSON.parse(savedData);
+const savedHighScoreData = localStorage.getItem(highScoreKey);
+if (savedHighScoreData) {
+  const {score} = JSON.parse(savedHighScoreData);
   renewHighScore(score);
 }
 
@@ -142,7 +143,7 @@ window.addEventListener("beforeunload", () => {
     score: highScore,
   };
 
-  localStorage.setItem(HIGH_SCORE_KEY, JSON.stringify(highScoreData));
+  localStorage.setItem(highScoreKey, JSON.stringify(highScoreData));
 });
 
 function reset() {
@@ -164,3 +165,8 @@ function reset() {
 
 startButtonEl.addEventListener('click', reset);
 retryButtonEl.addEventListener('click', reset);
+
+modeRadioButtons.forEach(el => el.addEventListener('change', (e) => {
+  localStorage.setItem(MODE_KEY, JSON.stringify(e.target.value));
+  window.location.reload();
+}));
