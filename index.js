@@ -1,13 +1,11 @@
 import {getImageSrc, getWordAndImage, preloadImage} from "./utils/image.js";
 import {getShuffledArray} from "./utils/array.js";
+import {getHighScoreKey, MODE_KEY} from "./utils/keys.js";
 
-const MODE_KEY = 'type-the-word-mode';
-const HIGH_SCORE_KEY_STANDARD = 'type-the-word-high-score';
-const HIGH_SCORE_KEY_YOUNGKIDS = 'type-the-word-high-score-young-kids';
-const HIGH_SCORE_KEY_BRAINROT = 'type-the-word-high-score-brainrot';
-
-let currentScore = 0;
-let highScore = 0;
+const score = {
+  current: 0,
+  high: 0
+}
 
 const el = {
   word: document.querySelector('.js-current-word'),
@@ -16,6 +14,7 @@ const el = {
   startButton: document.querySelector('.js-start-button'),
   retryButton: document.querySelector('.js-retry-button'),
   modeRadioButtons: document.querySelectorAll('.js-mode-container input[type="radio"]'),
+  highScore: document.querySelector(".js-high-score"),
   countDownContainer: document.querySelector('.js-count-down-container'),
   countDown: document.querySelector('.js-count-down'),
   scoreContainer: document.querySelector('.js-score-container'),
@@ -25,13 +24,6 @@ const el = {
 
 const mode = localStorage.getItem(MODE_KEY) ? JSON.parse(localStorage.getItem(MODE_KEY)) : 'standard';
 document.querySelector(`input[value="${mode}"]`).checked = true;
-
-let highScoreKey = HIGH_SCORE_KEY_STANDARD;
-if (mode === 'brainrot') {
-  highScoreKey = HIGH_SCORE_KEY_BRAINROT;
-} else if (mode === 'youngKids') {
-  highScoreKey = HIGH_SCORE_KEY_YOUNGKIDS;
-}
 
 /** Get the collection of 10.000 Dutch kids friendly words **/
 let wordItems = [];
@@ -63,7 +55,7 @@ let index = 0;
 
 /** Get and show a new random word **/
 function getAndShowNewWord() {
-  const {word, image} = getWordAndImage(wordItems[index]);
+  const {word, image} = getWordAndImage(wordItems[index], mode);
 
   const {image: nextImage} = wordItems[index + 1];
   nextImage && preloadImage(nextImage);
@@ -83,24 +75,23 @@ function getAndShowNewWord() {
 }
 
 /** Set and show the highscore  **/
-function renewHighScore(score) {
-  highScore = score;
+function renewHighScore(newScore) {
+  score.high = newScore;
 
-  const highScoreEl = document.querySelector(".js-high-score");
-  const splittedHighScore = score.toString().split("");
+  const splittedHighScore = newScore.toString().split("");
 
-  highScoreEl.innerHTML = "";
+  el.highScore.innerHTML = "";
   splittedHighScore.forEach((digit, i) => {
-    highScoreEl.innerHTML = highScoreEl.innerHTML + `<span style="--i: ${i};">${digit}</span>`
+    el.highScore.innerHTML = el.highScore.innerHTML + `<span style="--i: ${i};">${digit}</span>`
   })
 
   document.querySelector(".js-high-score-container").classList.remove("hidden");
 }
 
-function setScore(score) {
-  currentScore = score;
+function setScore(newScore) {
+  score.current = newScore;
   el.score.innerHTML = "";
-  const splittedScore = score.toString().split("");
+  const splittedScore = newScore.toString().split("");
   splittedScore.forEach((digit, i) => {
     el.score.innerHTML = el.score.innerHTML + `<span style="--i: ${i};">${digit}</span>`
   })
@@ -108,17 +99,17 @@ function setScore(score) {
 
 /** Increase and show the score (and if needed also the highscore) **/
 function increaseScore() {
-  const newScore = currentScore + el.word.getAttribute('data-current-word').length * 10;
+  const newScore = score.current + el.word.getAttribute('data-current-word').length * 10;
 
   setScore(newScore);
 
-  if (newScore > Number(highScore)) {
+  if (newScore > Number(score.high)) {
     renewHighScore(newScore);
   }
 }
 
 /** Retrieve and show high score from local storage, if there is one **/
-const savedHighScoreData = localStorage.getItem(highScoreKey);
+const savedHighScoreData = localStorage.getItem(getHighScoreKey(mode));
 if (savedHighScoreData) {
   const {score} = JSON.parse(savedHighScoreData);
   renewHighScore(score);
@@ -156,10 +147,10 @@ el.input.addEventListener('input', (e) => {
 /** Save high score, right before the page closes **/
 window.addEventListener("beforeunload", () => {
   const highScoreData = {
-    score: highScore,
+    score: score.high,
   };
 
-  localStorage.setItem(highScoreKey, JSON.stringify(highScoreData));
+  localStorage.setItem(getHighScoreKey(mode), JSON.stringify(highScoreData));
 });
 
 function reset() {
