@@ -1,3 +1,6 @@
+import {getImageSrc, preloadImage} from "./utils/image.js";
+import {getShuffledArray} from "./utils/array.js";
+
 const MODE_KEY = 'type-the-word-mode';
 const HIGH_SCORE_KEY_STANDARD = 'type-the-word-high-score';
 const HIGH_SCORE_KEY_YOUNGKIDS = 'type-the-word-high-score-young-kids';
@@ -30,28 +33,14 @@ if (mode === 'brainrot') {
   highScoreKey = HIGH_SCORE_KEY_YOUNGKIDS;
 }
 
-function getShuffledArray(arr) {
-  const a = arr.slice();
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
-
-function getArrayShiftAndPushed(arr) {
-  arr.push(arr.shift())
-  return arr;
-}
-
 /** Get the collection of 10.000 Dutch kids friendly words **/
 let wordItems = [];
 
-let fileName = "wordsDutch.json?v=2";
+let fileName = "wordsDutch.json?v=3";
 if (mode === 'youngKids') {
-  fileName = 'wordsPerImageYoungKids.json?v=2';
+  fileName = 'wordsPerImageYoungKids.json?v=3';
 } else if (mode === 'brainrot') {
-  fileName = 'wordsPerImageBrainrot.json?v=2';
+  fileName = 'wordsPerImageBrainrot.json?v=3';
 }
 
 fetch(fileName)
@@ -77,13 +66,6 @@ function getWordAndImage(item) {
   return item;
 }
 
-function preloadImage(image) {
-  const src = getImageSrc(image);
-  if (!src) return;
-  const preloadImg = new Image();
-  preloadImg.src = src;
-}
-
 let index = 0;
 
 /** Get and show a new random word **/
@@ -96,7 +78,7 @@ function getAndShowNewWord() {
   wordEl.setAttribute('data-current-word', word);
 
   if (image) {
-    wordImageEl.src = getImageSrc(image);
+    wordImageEl.src = getImageSrc(image, mode);
     wordImageEl.classList.remove('hidden');
   }
 
@@ -211,10 +193,3 @@ modeRadioButtons.forEach(el => el.addEventListener('change', (e) => {
   localStorage.setItem(MODE_KEY, JSON.stringify(e.target.value));
   window.location.reload();
 }));
-
-function getImageSrc(image) {
-  if (!image) return null;
-  return mode === 'youngKids'
-    ? `images/icons/${image}.svg`
-    : `images/brainrot/${image}.webp`;
-}

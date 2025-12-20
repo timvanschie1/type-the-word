@@ -37,7 +37,7 @@ input[type='text'], button {
     border-radius: 0.5em;
     box-shadow: 2px 2px 4px rgb(0 0 0 / 60%);
     text-align: center;
-    padding-inline: 0.3vmin;
+    padding-inline: 2vmin;
     min-height: 14vmin;
     font-size: 7vmin;
 }
