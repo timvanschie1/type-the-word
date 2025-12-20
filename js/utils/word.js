@@ -7,14 +7,14 @@ import {getRandomHue} from "./color.js";
  */
 export function getWordsFileName(mode) {
   if (mode === 'youngKids') {
-    return 'wordsPerImageYoungKids.json?v=6';
+    return 'wordsPerImageYoungKids.json?v=7';
   }
 
   if (mode === 'brainrot') {
-    return 'wordsPerImageBrainrot.json?v=6';
+    return 'wordsPerImageBrainrot.json?v=7';
   }
 
-  return "wordsDutch.json?v=6";
+  return "wordsDutch.json?v=7";
 }
 
 /**
