@@ -11,3 +11,10 @@ export function preloadImage(image) {
   const preloadImg = new Image();
   preloadImg.src = src;
 }
+
+export function getWordAndImage(item, mode) {
+  if (mode === 'standard') {
+    return {word: item}
+  }
+  return item;
+}

@@ -1,4 +1,4 @@
-import {getImageSrc, preloadImage} from "./utils/image.js";
+import {getImageSrc, getWordAndImage, preloadImage} from "./utils/image.js";
 import {getShuffledArray} from "./utils/array.js";
 
 const MODE_KEY = 'type-the-word-mode';
@@ -9,19 +9,19 @@ const HIGH_SCORE_KEY_BRAINROT = 'type-the-word-high-score-brainrot';
 let currentScore = 0;
 let highScore = 0;
 
-const wordEl = document.querySelector('.js-current-word');
-const wordImageEl = document.querySelector('.js-current-word-image');
-const inputEl = document.querySelector('input');
-const startButtonEl = document.querySelector('.js-start-button');
-const retryButtonEl = document.querySelector('.js-retry-button');
-const modeRadioButtons = document.querySelectorAll('.js-mode-container input[type="radio"]');
-
-const countDownContainerEl = document.querySelector('.js-count-down-container');
-const countDownEl = document.querySelector('.js-count-down');
-const scoreContainerEl = document.querySelector('.js-score-container');
-const scoreEl = document.querySelector('.js-score');
-
-const bodyEl = document.querySelector('body');
+const el = {
+  word: document.querySelector('.js-current-word'),
+  wordImage: document.querySelector('.js-current-word-image'),
+  input: document.querySelector("input[type='text']"),
+  startButton: document.querySelector('.js-start-button'),
+  retryButton: document.querySelector('.js-retry-button'),
+  modeRadioButtons: document.querySelectorAll('.js-mode-container input[type="radio"]'),
+  countDownContainer: document.querySelector('.js-count-down-container'),
+  countDown: document.querySelector('.js-count-down'),
+  scoreContainer: document.querySelector('.js-score-container'),
+  score: document.querySelector('.js-score'),
+  body: document.querySelector('body'),
+}
 
 const mode = localStorage.getItem(MODE_KEY) ? JSON.parse(localStorage.getItem(MODE_KEY)) : 'standard';
 document.querySelector(`input[value="${mode}"]`).checked = true;
@@ -49,7 +49,7 @@ fetch(fileName)
 
 /** Check if the user typed in the current random word **/
 function isWordTyped(inputValue) {
-  const word = wordEl.getAttribute('data-current-word');
+  const word = el.word.getAttribute('data-current-word');
   const typedWord = inputValue.trim();
   return word.toLowerCase() === typedWord.toLowerCase();
 }
@@ -57,13 +57,6 @@ function isWordTyped(inputValue) {
 /** Get random Hue to be used as the third parameter of the oklch color syntax **/
 function getRandomHue() {
   return Math.floor(Math.random() * 361).toString(); // Hue ranges from 0 to 360
-}
-
-function getWordAndImage(item) {
-  if (mode === 'standard') {
-    return {word: item}
-  }
-  return item;
 }
 
 let index = 0;
@@ -75,16 +68,16 @@ function getAndShowNewWord() {
   const {image: nextImage} = wordItems[index + 1];
   nextImage && preloadImage(nextImage);
 
-  wordEl.setAttribute('data-current-word', word);
+  el.word.setAttribute('data-current-word', word);
 
   if (image) {
-    wordImageEl.src = getImageSrc(image, mode);
-    wordImageEl.classList.remove('hidden');
+    el.wordImage.src = getImageSrc(image, mode);
+    el.wordImage.classList.remove('hidden');
   }
 
   /** We also set two random Hues **/
-  bodyEl.style.setProperty("--randomHue1", getRandomHue());
-  bodyEl.style.setProperty("--randomHue2", getRandomHue());
+  el.body.style.setProperty("--randomHue1", getRandomHue());
+  el.body.style.setProperty("--randomHue2", getRandomHue());
 
   index = index < wordItems.length - 1 ? index + 1 : 0;
 }
@@ -106,16 +99,16 @@ function renewHighScore(score) {
 
 function setScore(score) {
   currentScore = score;
-  scoreEl.innerHTML = "";
+  el.score.innerHTML = "";
   const splittedScore = score.toString().split("");
   splittedScore.forEach((digit, i) => {
-    scoreEl.innerHTML = scoreEl.innerHTML + `<span style="--i: ${i};">${digit}</span>`
+    el.score.innerHTML = el.score.innerHTML + `<span style="--i: ${i};">${digit}</span>`
   })
 }
 
 /** Increase and show the score (and if needed also the highscore) **/
 function increaseScore() {
-  const newScore = currentScore + wordEl.getAttribute('data-current-word').length * 10;
+  const newScore = currentScore + el.word.getAttribute('data-current-word').length * 10;
 
   setScore(newScore);
 
@@ -134,30 +127,30 @@ if (savedHighScoreData) {
 /** Count down from 60 to 0 **/
 function startCountDown() {
   let secondsLeft = mode === 'youngKids' ? 120 : 60;
-  countDownEl.textContent = secondsLeft.toString();
+  el.countDown.textContent = secondsLeft.toString();
 
   const countDownInterval = setInterval(() => {
     secondsLeft--;
 
-    countDownEl.textContent = secondsLeft.toString();
+    el.countDown.textContent = secondsLeft.toString();
 
     if (secondsLeft === 0) {
-      wordEl.setAttribute('data-current-word', "Nog eens?");
-      inputEl.classList.add('hidden');
-      retryButtonEl.classList.remove('hidden');
-      retryButtonEl.focus();
+      el.word.setAttribute('data-current-word', "Nog eens?");
+      el.input.classList.add('hidden');
+      el.retryButton.classList.remove('hidden');
+      el.retryButton.focus();
       clearInterval(countDownInterval);
     }
   }, 1000);
 }
 
 /** Handle every keystroke in the input field **/
-inputEl.addEventListener('input', (e) => {
+el.input.addEventListener('input', (e) => {
   if (!isWordTyped(e.target.value)) return;
 
   increaseScore();
   getAndShowNewWord();
-  inputEl.value = '';
+  el.input.value = '';
 })
 
 /** Save high score, right before the page closes **/
@@ -174,22 +167,22 @@ function reset() {
   setScore(0);
   getAndShowNewWord();
 
-  [countDownContainerEl, scoreContainerEl, inputEl].forEach(el => {
+  [el.countDownContainer, el.scoreContainer, el.input].forEach(el => {
     el.classList.remove('hidden')
   });
 
-  [startButtonEl, retryButtonEl].forEach(el => {
+  [el.startButton, el.retryButton].forEach(el => {
     el.classList.add('hidden')
   });
 
-  inputEl.value = '';
-  inputEl.focus();
+  el.input.value = '';
+  el.input.focus();
 }
 
-startButtonEl.addEventListener('click', reset);
-retryButtonEl.addEventListener('click', reset);
+el.startButton.addEventListener('click', reset);
+el.retryButton.addEventListener('click', reset);
 
-modeRadioButtons.forEach(el => el.addEventListener('change', (e) => {
+el.modeRadioButtons.forEach(el => el.addEventListener('change', (e) => {
   localStorage.setItem(MODE_KEY, JSON.stringify(e.target.value));
   window.location.reload();
 }));
