@@ -1,6 +1,7 @@
 import {getImageSrc, getWordAndImage, preloadImage} from "./utils/image.js";
 import {getShuffledArray} from "./utils/array.js";
 import {getHighScoreKey, MODE_KEY} from "./utils/keys.js";
+import {getWordsFileName} from "./utils/word.js";
 
 const score = {
   current: 0,
@@ -28,25 +29,25 @@ document.querySelector(`input[value="${mode}"]`).checked = true;
 /** Get the collection of 10.000 Dutch kids friendly words **/
 let wordItems = [];
 
-let fileName = "wordsDutch.json?v=3";
-if (mode === 'youngKids') {
-  fileName = 'wordsPerImageYoungKids.json?v=3';
-} else if (mode === 'brainrot') {
-  fileName = 'wordsPerImageBrainrot.json?v=3';
-}
-
-fetch(fileName)
+fetch(getWordsFileName(mode))
   .then(r => r.json())
   .then(data => wordItems = getShuffledArray(data));
 
-/** Check if the user typed in the current random word **/
+/**
+ * Check if the user typed in the current random word
+ * @param {string} inputValue - The text from the input field.
+ * @returns {boolean}
+ */
 function isWordTyped(inputValue) {
   const word = el.word.getAttribute('data-current-word');
   const typedWord = inputValue.trim();
   return word.toLowerCase() === typedWord.toLowerCase();
 }
 
-/** Get random Hue to be used as the third parameter of the oklch color syntax **/
+/**
+ * Get random Hue to be used as the third parameter of the oklch color syntax
+ * @returns {string} A value between 0 and 360.
+ */
 function getRandomHue() {
   return Math.floor(Math.random() * 361).toString(); // Hue ranges from 0 to 360
 }
@@ -58,7 +59,7 @@ function getAndShowNewWord() {
   const {word, image} = getWordAndImage(wordItems[index], mode);
 
   const {image: nextImage} = wordItems[index + 1];
-  nextImage && preloadImage(nextImage);
+  nextImage && preloadImage(nextImage, mode);
 
   el.word.setAttribute('data-current-word', word);
 
@@ -74,7 +75,10 @@ function getAndShowNewWord() {
   index = index < wordItems.length - 1 ? index + 1 : 0;
 }
 
-/** Set and show the highscore  **/
+/**
+ * Set and show the highscore
+ * @param {number} newScore - The score to be set as the new high score.
+ */
 function renewHighScore(newScore) {
   score.high = newScore;
 
@@ -88,6 +92,10 @@ function renewHighScore(newScore) {
   document.querySelector(".js-high-score-container").classList.remove("hidden");
 }
 
+/**
+ * Updates the current game score and refreshes the UI.
+ * @param {number} newScore - The value to set the current score to.
+ */
 function setScore(newScore) {
   score.current = newScore;
   el.score.innerHTML = "";

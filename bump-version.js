@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
-const files = ["index.html", "index.js"];
+const files = ['./utils/word.js', "index.html", "index.js"];
 
 files.forEach((file) => {
   const filePath = path.join(process.cwd(), file);
