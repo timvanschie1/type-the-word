@@ -56,9 +56,7 @@ if (mode === 'youngKids') {
 
 fetch(fileName)
   .then(r => r.json())
-  .then(data => {
-    wordItems = mode === 'brainrot' ? data : getShuffledArray(data)
-  });
+  .then(data => wordItems = getShuffledArray(data));
 
 /** Check if the user typed in the current random word **/
 function isWordTyped(inputValue) {
@@ -79,20 +77,34 @@ function getWordAndImage(item) {
   return item;
 }
 
+function preloadImage(image) {
+  const src = getImageSrc(image);
+  if (!src) return;
+  const preloadImg = new Image();
+  preloadImg.src = src;
+}
+
+let index = 0;
+
 /** Get and show a new random word **/
 function getAndShowNewWord() {
-  const array = mode === 'brainrot' ? getArrayShiftAndPushed(wordItems) : getShuffledArray(wordItems);
-  const {word, image} = getWordAndImage(array[0]);
+  const {word, image} = getWordAndImage(wordItems[index]);
+
+  const {image: nextImage} = wordItems[index + 1];
+  nextImage && preloadImage(nextImage);
+
   wordEl.setAttribute('data-current-word', word);
 
   if (image) {
-    wordImageEl.src = mode === 'youngKids' ? `images/icons/${image}.svg` : `images/brainrot/${image}.webp`;
+    wordImageEl.src = getImageSrc(image);
     wordImageEl.classList.remove('hidden');
   }
 
   /** We also set two random Hues **/
   bodyEl.style.setProperty("--randomHue1", getRandomHue());
   bodyEl.style.setProperty("--randomHue2", getRandomHue());
+
+  index = index < wordItems.length - 1 ? index + 1 : 0;
 }
 
 /** Set and show the highscore  **/
@@ -199,3 +211,10 @@ modeRadioButtons.forEach(el => el.addEventListener('change', (e) => {
   localStorage.setItem(MODE_KEY, JSON.stringify(e.target.value));
   window.location.reload();
 }));
+
+function getImageSrc(image) {
+  if (!image) return null;
+  return mode === 'youngKids'
+    ? `images/icons/${image}.svg`
+    : `images/brainrot/${image}.webp`;
+}
