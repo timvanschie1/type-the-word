@@ -1,9 +1,9 @@
-import {getShuffledArray} from "./utils/array.js";
-import {getHighScoreKey, MODE_KEY} from "./utils/keys.js";
-import {getAndShowNewWord, getWordsFileName, isWordTyped} from "./utils/word.js";
+import {MODE_KEY} from "./utils/keys.js";
+import {getAndShowNewWord, isWordTyped, loadWordItems} from "./utils/word.js";
 import {startCountDown} from "./utils/countdown.js";
+import {getHighScoreKey, increaseScore, initHighScore, setScore} from "./utils/score.js";
 
-const score = {
+const scoreObj = {
   current: 0,
   high: 0
 }
@@ -16,6 +16,7 @@ const el = {
   retryButton: document.querySelector('.js-retry-button'),
   modeRadioButtons: document.querySelectorAll('.js-mode-container input[type="radio"]'),
   highScore: document.querySelector(".js-high-score"),
+  highScoreContainer: document.querySelector(".js-high-score-container"),
   countDownContainer: document.querySelector('.js-count-down-container'),
   countDown: document.querySelector('.js-count-down'),
   scoreContainer: document.querySelector('.js-score-container'),
@@ -26,83 +27,27 @@ const el = {
 const mode = localStorage.getItem(MODE_KEY) ? JSON.parse(localStorage.getItem(MODE_KEY)) : 'standard';
 document.querySelector(`input[value="${mode}"]`).checked = true;
 
-/** Get the collection of 10.000 Dutch kids friendly words **/
-let wordItems = [];
-
-fetch(getWordsFileName(mode))
-  .then(r => r.json())
-  .then(data => wordItems = getShuffledArray(data));
-
-/**
- * Set and show the highscore
- * @param {number} newScore - The score to be set as the new high score.
- */
-function renewHighScore(newScore) {
-  score.high = newScore;
-
-  const splittedHighScore = newScore.toString().split("");
-
-  el.highScore.innerHTML = "";
-  splittedHighScore.forEach((digit, i) => {
-    el.highScore.innerHTML = el.highScore.innerHTML + `<span style="--i: ${i};">${digit}</span>`
-  })
-
-  document.querySelector(".js-high-score-container").classList.remove("hidden");
-}
-
-/**
- * Updates the current game score and refreshes the UI.
- * @param {number} newScore - The value to set the current score to.
- */
-function setScore(newScore) {
-  score.current = newScore;
-  el.score.innerHTML = "";
-  const splittedScore = newScore.toString().split("");
-  splittedScore.forEach((digit, i) => {
-    el.score.innerHTML = el.score.innerHTML + `<span style="--i: ${i};">${digit}</span>`
-  })
-}
-
-/** Increase and show the score (and if needed also the highscore) **/
-function increaseScore() {
-  const newScore = score.current + el.word.getAttribute('data-current-word').length * 10;
-
-  setScore(newScore);
-
-  if (newScore > Number(score.high)) {
-    renewHighScore(newScore);
-  }
-}
-
-/** Retrieve and show high score from local storage, if there is one **/
-const savedHighScoreData = localStorage.getItem(getHighScoreKey(mode));
-if (savedHighScoreData) {
-  const {score} = JSON.parse(savedHighScoreData);
-  renewHighScore(score);
-}
+loadWordItems(mode);
+initHighScore(mode, scoreObj, el);
 
 /** Handle every keystroke in the input field **/
 el.input.addEventListener('input', (e) => {
   if (!isWordTyped(e.target.value, el.word)) return;
-
-  increaseScore();
-  getAndShowNewWord(wordItems, mode, el);
+  increaseScore(scoreObj, el);
+  getAndShowNewWord(mode, el);
   el.input.value = '';
 })
 
 /** Save high score, right before the page closes **/
 window.addEventListener("beforeunload", () => {
-  const highScoreData = {
-    score: score.high,
-  };
-
+  const highScoreData = { score: scoreObj.high };
   localStorage.setItem(getHighScoreKey(mode), JSON.stringify(highScoreData));
 });
 
 function reset() {
   startCountDown(mode, el);
-  setScore(0);
-  getAndShowNewWord(wordItems, mode, el);
+  setScore(scoreObj, 0, el);
+  getAndShowNewWord(mode, el);
 
   [el.countDownContainer, el.scoreContainer, el.input].forEach(element => {
     element.classList.remove('hidden')

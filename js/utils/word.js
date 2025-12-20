@@ -1,5 +1,16 @@
 import {getImageSrc, preloadImage} from "./image.js";
 import {getRandomHue} from "./color.js";
+import {getShuffledArray} from "./array.js";
+
+/** Get the collection of 10.000 Dutch kids friendly words **/
+let wordItems = [];
+
+/** @param {string} mode - The current game mode. **/
+export function loadWordItems(mode) {
+  fetch(getWordsFileName(mode))
+    .then(r => r.json())
+    .then(data => wordItems = getShuffledArray(data));
+}
 
 /**
  * @param {string} mode - The current game mode.
@@ -7,14 +18,14 @@ import {getRandomHue} from "./color.js";
  */
 export function getWordsFileName(mode) {
   if (mode === 'youngKids') {
-    return 'wordsPerImageYoungKids.json?v=7';
+    return 'wordsPerImageYoungKids.json?v=8';
   }
 
   if (mode === 'brainrot') {
-    return 'wordsPerImageBrainrot.json?v=7';
+    return 'wordsPerImageBrainrot.json?v=8';
   }
 
-  return "wordsDutch.json?v=7";
+  return "wordsDutch.json?v=8";
 }
 
 /**
@@ -45,11 +56,10 @@ let index = 0;
 
 /**
  * Get and show a new random word
- * @param {Array<string|Object>} wordItems - The collection of available words/items.
  * @param {string} mode - The current active game mode.
  * @param {Object} el - Object containing the necessary DOM elements (word, wordImage, body).
  */
-export function getAndShowNewWord(wordItems, mode, el) {
+export function getAndShowNewWord(mode, el) {
   const {word, image} = getWordAndImage(wordItems[index], mode);
 
   const {image: nextImage} = wordItems[index + 1];
