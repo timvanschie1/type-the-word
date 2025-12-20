@@ -1,12 +1,7 @@
-import {MODE_KEY} from "./utils/keys.js";
+import {getMode, handleModeChange} from "./utils/mode.js";
 import {getAndShowNewWord, isWordTyped, loadWordItems} from "./utils/word.js";
 import {startCountDown} from "./utils/countdown.js";
-import {getHighScoreKey, increaseScore, initHighScore, setScore} from "./utils/score.js";
-
-const scoreObj = {
-  current: 0,
-  high: 0
-}
+import {handleHighScoreBeforeUnload, increaseScore, initHighScore, setScore} from "./utils/score.js";
 
 const el = {
   word: document.querySelector('.js-current-word'),
@@ -24,39 +19,35 @@ const el = {
   body: document.querySelector('body'),
 }
 
-const mode = localStorage.getItem(MODE_KEY) ? JSON.parse(localStorage.getItem(MODE_KEY)) : 'standard';
+const mode = getMode();
 document.querySelector(`input[value="${mode}"]`).checked = true;
 
 loadWordItems(mode);
-initHighScore(mode, scoreObj, el);
+initHighScore(mode, el);
 
 /** Handle every keystroke in the input field **/
 el.input.addEventListener('input', (e) => {
-  if (!isWordTyped(e.target.value, el.word)) return;
-  increaseScore(scoreObj, el);
-  getAndShowNewWord(mode, el);
-  el.input.value = '';
+  if (isWordTyped(e.target.value, el.word)) {
+    increaseScore(el);
+    getAndShowNewWord(mode, el);
+    el.input.value = '';
+  }
 })
 
-/** Save high score, right before the page closes **/
-window.addEventListener("beforeunload", () => {
-  const highScoreData = { score: scoreObj.high };
-  localStorage.setItem(getHighScoreKey(mode), JSON.stringify(highScoreData));
-});
+
+window.addEventListener("beforeunload", () => handleHighScoreBeforeUnload(mode));
 
 function reset() {
   startCountDown(mode, el);
-  setScore(scoreObj, 0, el);
+  setScore(0, el);
   getAndShowNewWord(mode, el);
 
-  [el.countDownContainer, el.scoreContainer, el.input].forEach(element => {
-    element.classList.remove('hidden')
-  });
+  el.countDownContainer.classList.remove('hidden');
+  el.scoreContainer.classList.remove('hidden');
+  el.input.classList.remove('hidden');
 
-  [el.startButton, el.retryButton].forEach(element => {
-    element.classList.add('hidden')
-  });
-
+  el.startButton.classList.add('hidden');
+  el.retryButton.classList.add('hidden');
   el.input.value = '';
   el.input.focus();
 }
@@ -64,7 +55,6 @@ function reset() {
 el.startButton.addEventListener('click', reset);
 el.retryButton.addEventListener('click', reset);
 
-el.modeRadioButtons.forEach(el => el.addEventListener('change', (e) => {
-  localStorage.setItem(MODE_KEY, JSON.stringify(e.target.value));
-  window.location.reload();
-}));
+el.modeRadioButtons.forEach(el => {
+  el.addEventListener('change', handleModeChange);
+});

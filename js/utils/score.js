@@ -2,13 +2,17 @@ const HIGH_SCORE_KEY_STANDARD = 'type-the-word-high-score';
 const HIGH_SCORE_KEY_YOUNGKIDS = 'type-the-word-high-score-young-kids';
 const HIGH_SCORE_KEY_BRAINROT = 'type-the-word-high-score-brainrot';
 
+const scoreObj = {
+  current: 0,
+  high: 0
+}
+
 /**
  * Set and show the highscore
- * @param {Object} scoreObj - The global score state object containing the 'high' property.
  * @param {number} newScore - The new score value to be recorded as the high score.
  * @param {Object} el - Object containing the DOM elements (highScore, highScoreContainer).
  */
-export function renewHighScore(scoreObj, newScore, el) {
+export function renewHighScore(newScore, el) {
   scoreObj.high = newScore;
 
   const splittedHighScore = newScore.toString().split("");
@@ -39,11 +43,10 @@ export function getHighScoreKey(mode) {
 
 /**
  * Updates the current game score and refreshes the UI.
- * @param {Object} scoreObj - The global score state object.
  * @param {number} newScore - The new score value to set.
  * @param {Object} el - Object containing the DOM elements (score).
  */
-export function setScore(scoreObj, newScore, el) {
+export function setScore(newScore, el) {
   scoreObj.current = newScore;
   el.score.innerHTML = "";
   const splittedScore = newScore.toString().split("");
@@ -54,29 +57,36 @@ export function setScore(scoreObj, newScore, el) {
 
 /**
  * Increase and show the score (and if needed also the highscore)
- * @param {Object} scoreObj - The global score state object.
  * @param {Object} el - Object containing the DOM elements (word, score, etc.).
  */
-export function increaseScore(scoreObj, el) {
+export function increaseScore(el) {
   const newScore = scoreObj.current + el.word.getAttribute('data-current-word').length * 10;
-  setScore(scoreObj, newScore, el);
+  setScore(newScore, el);
 
   if (newScore > Number(scoreObj.high)) {
-    renewHighScore(scoreObj, newScore, el);
+    renewHighScore(newScore, el);
   }
 }
 
 /**
  * Retrieve and show high score from local storage, if there is one
  * @param {string} mode - The current game mode.
- * @param {Object} scoreObj - The global score state object to be updated.
  * @param {Object} el - Object containing the DOM elements for high score display.
  */
-export function initHighScore(mode, scoreObj, el) {
+export function initHighScore(mode, el) {
   const savedHighScoreData = localStorage.getItem(getHighScoreKey(mode));
 
   if (savedHighScoreData) {
     const {score} = JSON.parse(savedHighScoreData);
-    renewHighScore(scoreObj, score, el);
+    renewHighScore(score, el);
   }
+}
+
+/**
+ * Save high score, right before the page closes
+ * @param {string} mode - The current game mode.
+ */
+export function handleHighScoreBeforeUnload(mode) {
+  const highScoreData = {score: scoreObj.high};
+  localStorage.setItem(getHighScoreKey(mode), JSON.stringify(highScoreData));
 }
