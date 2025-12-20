@@ -1,6 +1,7 @@
 import {getShuffledArray} from "./utils/array.js";
 import {getHighScoreKey, MODE_KEY} from "./utils/keys.js";
 import {getAndShowNewWord, getWordsFileName, isWordTyped} from "./utils/word.js";
+import {startCountDown} from "./utils/countdown.js";
 
 const score = {
   current: 0,
@@ -80,26 +81,6 @@ if (savedHighScoreData) {
   renewHighScore(score);
 }
 
-/** Count down from 60 to 0 **/
-function startCountDown() {
-  let secondsLeft = mode === 'youngKids' ? 120 : 60;
-  el.countDown.textContent = secondsLeft.toString();
-
-  const countDownInterval = setInterval(() => {
-    secondsLeft--;
-
-    el.countDown.textContent = secondsLeft.toString();
-
-    if (secondsLeft === 0) {
-      el.word.setAttribute('data-current-word', "Nog eens?");
-      el.input.classList.add('hidden');
-      el.retryButton.classList.remove('hidden');
-      el.retryButton.focus();
-      clearInterval(countDownInterval);
-    }
-  }, 1000);
-}
-
 /** Handle every keystroke in the input field **/
 el.input.addEventListener('input', (e) => {
   if (!isWordTyped(e.target.value, el.word)) return;
@@ -119,7 +100,7 @@ window.addEventListener("beforeunload", () => {
 });
 
 function reset() {
-  startCountDown();
+  startCountDown(mode, el);
   setScore(0);
   getAndShowNewWord(wordItems, mode, el);
 
