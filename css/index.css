@@ -240,6 +240,24 @@ body:has(img[src*='.webp']) .count-down-container {
     }
 }
 
+/** Added to the html element via JS **/
+.six-seven-animation {
+    animation: sixSeven 0.7s linear;
+    animation-iteration-count: 4;
+}
+
+@keyframes sixSeven {
+    0%, 100% {
+        transform: skewY(0deg);
+    }
+    25% {
+        transform: skewY(-10deg);
+    }
+    75% {
+        transform: skewY(10deg);
+    }
+}
+
 @keyframes wave {
     0%, 40%, 100% {
         transform: translateY(0)

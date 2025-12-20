@@ -37,7 +37,14 @@ export function getWordsFileName(mode) {
 export function isWordTyped(inputValue, wordEl) {
   const word = wordEl.getAttribute('data-current-word');
   const typedWord = inputValue.trim();
-  return word.toLowerCase() === typedWord.toLowerCase();
+  const isWordTyped = word.toLowerCase() === typedWord.toLowerCase();
+
+  if (isWordTyped && typedWord === 'six seven') {
+    document.body.classList.add('six-seven-animation');
+    window.setTimeout(() => document.body.classList.remove('six-seven-animation'), 4000);
+  }
+
+  return isWordTyped;
 }
 
 /**
