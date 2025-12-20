@@ -1,7 +1,6 @@
-import {getImageSrc, getWordAndImage, preloadImage} from "./utils/image.js";
 import {getShuffledArray} from "./utils/array.js";
 import {getHighScoreKey, MODE_KEY} from "./utils/keys.js";
-import {getWordsFileName} from "./utils/word.js";
+import {getAndShowNewWord, getWordsFileName, isWordTyped} from "./utils/word.js";
 
 const score = {
   current: 0,
@@ -32,48 +31,6 @@ let wordItems = [];
 fetch(getWordsFileName(mode))
   .then(r => r.json())
   .then(data => wordItems = getShuffledArray(data));
-
-/**
- * Check if the user typed in the current random word
- * @param {string} inputValue - The text from the input field.
- * @returns {boolean}
- */
-function isWordTyped(inputValue) {
-  const word = el.word.getAttribute('data-current-word');
-  const typedWord = inputValue.trim();
-  return word.toLowerCase() === typedWord.toLowerCase();
-}
-
-/**
- * Get random Hue to be used as the third parameter of the oklch color syntax
- * @returns {string} A value between 0 and 360.
- */
-function getRandomHue() {
-  return Math.floor(Math.random() * 361).toString(); // Hue ranges from 0 to 360
-}
-
-let index = 0;
-
-/** Get and show a new random word **/
-function getAndShowNewWord() {
-  const {word, image} = getWordAndImage(wordItems[index], mode);
-
-  const {image: nextImage} = wordItems[index + 1];
-  nextImage && preloadImage(nextImage, mode);
-
-  el.word.setAttribute('data-current-word', word);
-
-  if (image) {
-    el.wordImage.src = getImageSrc(image, mode);
-    el.wordImage.classList.remove('hidden');
-  }
-
-  /** We also set two random Hues **/
-  el.body.style.setProperty("--randomHue1", getRandomHue());
-  el.body.style.setProperty("--randomHue2", getRandomHue());
-
-  index = index < wordItems.length - 1 ? index + 1 : 0;
-}
 
 /**
  * Set and show the highscore
@@ -145,10 +102,10 @@ function startCountDown() {
 
 /** Handle every keystroke in the input field **/
 el.input.addEventListener('input', (e) => {
-  if (!isWordTyped(e.target.value)) return;
+  if (!isWordTyped(e.target.value, el.word)) return;
 
   increaseScore();
-  getAndShowNewWord();
+  getAndShowNewWord(wordItems, mode, el);
   el.input.value = '';
 })
 
@@ -164,14 +121,14 @@ window.addEventListener("beforeunload", () => {
 function reset() {
   startCountDown();
   setScore(0);
-  getAndShowNewWord();
+  getAndShowNewWord(wordItems, mode, el);
 
-  [el.countDownContainer, el.scoreContainer, el.input].forEach(el => {
-    el.classList.remove('hidden')
+  [el.countDownContainer, el.scoreContainer, el.input].forEach(element => {
+    element.classList.remove('hidden')
   });
 
-  [el.startButton, el.retryButton].forEach(el => {
-    el.classList.add('hidden')
+  [el.startButton, el.retryButton].forEach(element => {
+    element.classList.add('hidden')
   });
 
   el.input.value = '';

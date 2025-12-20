@@ -21,15 +21,3 @@ export function preloadImage(image, mode) {
   const preloadImg = new Image();
   preloadImg.src = src;
 }
-
-/**
- * @param {string|Object} item - The raw data from the word list.
- * @param {string} mode - The current game mode.
- * @returns {Object} An object containing at least the 'word' property.
- */
-export function getWordAndImage(item, mode) {
-  if (mode === 'standard') {
-    return {word: item}
-  }
-  return item;
-}
