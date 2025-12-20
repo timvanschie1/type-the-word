@@ -4,12 +4,12 @@
  */
 export function getWordsFileName(mode) {
   if (mode === 'youngKids') {
-    return 'wordsPerImageYoungKids.json?v=3';
+    return 'wordsPerImageYoungKids.json?v=4';
   }
 
   if (mode === 'brainrot') {
-    return 'wordsPerImageBrainrot.json?v=3';
+    return 'wordsPerImageBrainrot.json?v=4';
   }
 
-  return "wordsDutch.json?v=3";
+  return "wordsDutch.json?v=4";
 }
