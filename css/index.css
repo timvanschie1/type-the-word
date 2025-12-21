@@ -92,6 +92,10 @@ input[type='text'] {
     &::placeholder {
         opacity: 0.3;
     }
+
+    body:has(.current-word-image[src*='.svg']) & {
+        text-transform: uppercase;
+    }
 }
 
 button {

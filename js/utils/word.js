@@ -19,14 +19,14 @@ export function loadWordItems(mode) {
  */
 export function getWordsFileName(mode) {
   if (mode === 'youngKids') {
-    return 'wordsPerImageYoungKids.json?v=11';
+    return 'wordsPerImageYoungKids.json?v=12';
   }
 
   if (mode === 'brainrot') {
-    return 'wordsPerImageBrainrot.json?v=11';
+    return 'wordsPerImageBrainrot.json?v=12';
   }
 
-  return "wordsDutch.json?v=11";
+  return "wordsDutch.json?v=12";
 }
 
 /**
