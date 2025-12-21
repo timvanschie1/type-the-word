@@ -155,6 +155,10 @@ button {
         .current-word-image[src*='.webp'] + & {
             font-size: 10vmin;
         }
+
+        .current-word-image[src*='.svg'] + & {
+            text-transform: uppercase;
+        }
     }
 
     &:has(button:hover) .current-word {

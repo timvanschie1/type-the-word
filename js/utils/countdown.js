@@ -4,7 +4,7 @@
  * @param {Object} el - Object containing relevant DOM elements (countDown, word, input, retryButton).
  */
 export function startCountDown(mode, el) {
-  let secondsLeft = mode === 'youngKids' ? 120 : 60;
+  let secondsLeft = mode === 'youngKids' ? 300 : 60;
   el.countDown.textContent = secondsLeft.toString();
 
   const countDownInterval = setInterval(() => {
