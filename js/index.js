@@ -2,6 +2,7 @@ import {getMode, handleModeChange} from "./utils/mode.js";
 import {getAndShowNewWord, isWordTyped, loadWordItems} from "./utils/word.js";
 import {startCountDown} from "./utils/countdown.js";
 import {handleHighScoreBeforeUnload, increaseScore, initHighScore, setScore} from "./utils/score.js";
+import {initAnimations} from "./utils/animation.js";
 
 const el = {
   word: document.querySelector('.js-current-word'),
@@ -24,6 +25,7 @@ document.querySelector(`input[value="${mode}"]`).checked = true;
 
 loadWordItems(mode);
 initHighScore(mode, el);
+initAnimations();
 
 /** Handle every keystroke in the input field **/
 el.input.addEventListener('input', (e) => {

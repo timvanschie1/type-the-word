@@ -1,6 +1,7 @@
 import {getImageSrc, preloadImage} from "./image.js";
 import {getRandomHue} from "./color.js";
 import {getShuffledArray} from "./array.js";
+import {doSixSevenAnimation} from "./animation.js";
 
 /** Get the collection of 10.000 Dutch kids friendly words **/
 let wordItems = [];
@@ -37,14 +38,7 @@ export function getWordsFileName(mode) {
 export function isWordTyped(inputValue, wordEl) {
   const word = wordEl.getAttribute('data-current-word');
   const typedWord = inputValue.trim();
-  const isWordTyped = word.toLowerCase() === typedWord.toLowerCase();
-
-  if (isWordTyped && typedWord === 'six seven') {
-    document.body.classList.add('six-seven-animation');
-    window.setTimeout(() => document.body.classList.remove('six-seven-animation'), 4000);
-  }
-
-  return isWordTyped;
+  return word.toLowerCase() === typedWord.toLowerCase();
 }
 
 /**
@@ -68,6 +62,10 @@ let index = 0;
  */
 export function getAndShowNewWord(mode, el) {
   const {word, image} = getWordAndImage(wordItems[index], mode);
+
+  if (word === 'six seven') {
+    doSixSevenAnimation(word);
+  }
 
   const {image: nextImage} = wordItems[index + 1];
   nextImage && preloadImage(nextImage, mode);
