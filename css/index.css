@@ -74,19 +74,6 @@ h1 {
     font-size: 4vmin;
 }
 
-input[type='text'] {
-    border: 0;
-    outline: 3px solid rgb(0 0 0 / 20%);
-
-    &::placeholder {
-        opacity: 0.3;
-    }
-
-    body:has(.current-word-image[src*='.svg']) & {
-        text-transform: uppercase;
-    }
-}
-
 .hidden {
     display: none;
 }

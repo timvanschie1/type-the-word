@@ -8,13 +8,13 @@
     .current-word-image {
         width: auto;
 
-        &[src*='.svg'] {
+        .mode--youngKids & {
             margin-bottom: -0.5em;
             filter: invert(100%) drop-shadow(2px 2px 4px rgb(0 0 0 / 60%));
             height: 17vmin;
         }
 
-        &[src*='.webp'] {
+        .mode--brainrot & {
             height: 36vmin;
             filter: drop-shadow(2px 2px 4px rgb(0 0 0 / 60%));
         }
@@ -33,11 +33,11 @@
             content: attr(data-current-word);
         }
 
-        .current-word-image[src*='.webp'] + & {
+        .mode--brainrot img:not(.hidden) + & {
             font-size: 10vmin;
         }
 
-        .current-word-image[src*='.svg'] + & {
+        .mode--youngKids img:not(.hidden) + & {
             text-transform: uppercase;
         }
     }
@@ -56,6 +56,19 @@
         min-height: 14vmin;
         max-width: 100%;
         font-size: 7vmin;
+    }
+
+    input[type='text'] {
+        border: 0;
+        outline: 3px solid rgb(0 0 0 / 20%);
+
+        &::placeholder {
+            opacity: 0.3;
+        }
+
+        .mode--youngKids & {
+            text-transform: uppercase;
+        }
     }
 
     button {

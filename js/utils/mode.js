@@ -1,3 +1,5 @@
+import {getEl} from "./elements.js";
+
 const MODE_KEY = 'type-the-word-mode';
 const DEFAULT_MODE = 'standard';
 
@@ -18,8 +20,10 @@ export function getMode() {
   return mode;
 }
 
-export function initModeSelector() {
-  document.querySelector(`input[value="${getMode()}"]`).checked = true;
+export function initMode() {
+  const mode = getMode();
+  document.querySelector(`input[value="${mode}"]`).checked = true;
+  getEl().body.classList.add(`mode--${mode}`);
 }
 
 export function handleModeChange(e) {

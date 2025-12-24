@@ -1,4 +1,4 @@
-import {getMode, handleModeChange, initModeSelector} from "./utils/mode.js";
+import {getMode, handleModeChange, initMode} from "./utils/mode.js";
 import {getAndShowNewWord, isWordTyped, loadWordItems, resetWordIndex} from "./utils/word.js";
 import {startCountDown} from "./utils/countdown.js";
 import {handleHighScoreBeforeUnload, increaseScore, initHighScore, setScore} from "./utils/score.js";
@@ -8,7 +8,7 @@ import {getEl} from "./utils/elements.js";
 
 await loadWordItems();
 initAnimations();
-initModeSelector();
+initMode();
 initHighScore();
 
 const el = getEl();
