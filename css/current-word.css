@@ -42,7 +42,7 @@
         }
     }
 
-    &:has(button:hover) .current-word {
+    &:has(button.hover) .current-word {
         transform: scale(0.8);
     }
 
@@ -81,13 +81,27 @@
         background: conic-gradient(from var(--angle), var(--color-1), var(--color-2), var(--color-1)) border-box;
         transition: transform 0.2s ease-out;
 
-        &:focus, &:hover {
+        &:focus, &.hover {
             outline: 3px solid transparent;
             animation: 1s focus-animation infinite;
         }
 
-        &:hover {
+        &.hover {
             transform: scale(1.2);
         }
+    }
+}
+
+@keyframes focus-animation {
+    0% {
+        outline-color: transparent;
+        outline-offset: 0;
+    }
+    10% {
+        outline-color: white;
+    }
+    100% {
+        outline-color: transparent;
+        outline-offset: 1rem;
     }
 }

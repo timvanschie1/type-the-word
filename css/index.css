@@ -78,15 +78,6 @@ h1 {
     display: none;
 }
 
-@keyframes fontWeight {
-    0% {
-        font-weight: 200;
-    }
-    100% {
-        font-weight: 500;
-    }
-}
-
 .high-score-container,
 .count-down-container,
 .score-container,
@@ -175,6 +166,15 @@ body:has(img[src*='.webp']) .count-down-container {
     }
 }
 
+@keyframes fontWeight {
+    0% {
+        font-weight: 200;
+    }
+    100% {
+        font-weight: 500;
+    }
+}
+
 @keyframes wave {
     0%, 40%, 100% {
         transform: translateY(0)
@@ -187,19 +187,5 @@ body:has(img[src*='.webp']) .count-down-container {
 @keyframes angleAnimation {
     to {
         --angle: 1turn;
-    }
-}
-
-@keyframes focus-animation {
-    0% {
-        outline-color: transparent;
-        outline-offset: 0;
-    }
-    10% {
-        outline-color: white;
-    }
-    100% {
-        outline-color: transparent;
-        outline-offset: 1rem;
     }
 }
