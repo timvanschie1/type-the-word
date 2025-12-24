@@ -1,5 +1,6 @@
 import {renderBrainrots} from "./brainrot.js";
 import {getMode} from "./mode.js";
+import {getEl} from "./elements.js";
 
 const HIGH_SCORE_KEY_STANDARD = 'type-the-word-high-score';
 const HIGH_SCORE_KEY_YOUNGKIDS = 'type-the-word-high-score-young-kids';
@@ -11,12 +12,13 @@ let scoreObj = {
   high: 0
 };
 
+const el = getEl();
+
 /**
  * Set and show the highscore
  * @param {number} newScore - The new score value to be recorded as the high score.
- * @param {Object} el - Object containing the DOM elements (highScore, highScoreContainer).
  */
-export function renewHighScore(newScore, el) {
+export function renewHighScore(newScore) {
   scoreObj.high = newScore;
 
   const splittedHighScore = newScore.toString().split("");
@@ -49,9 +51,8 @@ export function getHighScoreKey() {
 /**
  * Updates the current game score and refreshes the UI.
  * @param {Object} [newScoreObj] - The new score object to set.
- * @param {Object} el - Object containing the DOM elements (score).
  */
-export function setScore(newScoreObj, el) {
+export function setScore(newScoreObj) {
   if (newScoreObj) {
     scoreObj = newScoreObj;
   } else {
@@ -66,11 +67,8 @@ export function setScore(newScoreObj, el) {
   })
 }
 
-/**
- * Increase and show the score (and if needed also the highscore)
- * @param {Object} el - Object containing the DOM elements (word, score, etc.).
- */
-export function increaseScore(el) {
+/** Increase and show the score (and if needed also the highscore) **/
+export function increaseScore() {
   const word = el.word.getAttribute('data-current-word');
 
   const newScoreObj = {
@@ -84,23 +82,20 @@ export function increaseScore(el) {
     renderBrainrots(newScoreObj.brainrots, brainrot);
   }
 
-  setScore(newScoreObj, el);
+  setScore(newScoreObj);
 
   if (newScoreObj.current > Number(scoreObj.high)) {
-    renewHighScore(newScoreObj.current, el);
+    renewHighScore(newScoreObj.current);
   }
 }
 
-/**
- * Retrieve and show high score from local storage, if there is one
- * @param {Object} el - Object containing the DOM elements for high score display.
- */
-export function initHighScore(el) {
+/** Retrieve and show high score from local storage, if there is one **/
+export function initHighScore() {
   const savedHighScoreData = localStorage.getItem(getHighScoreKey());
 
   if (savedHighScoreData) {
     const {score} = JSON.parse(savedHighScoreData);
-    renewHighScore(score, el);
+    renewHighScore(score);
   }
 }
 

@@ -1,9 +1,11 @@
 import {getImageSrc, preloadImage} from "./image.js";
 import {getRandomHue} from "./color.js";
-import {getShuffledArray} from "./array.js";
 import {doSixSevenAnimation} from "./animation.js";
 import {increaseSecondsBasedOnWord} from "./countdown.js";
 import {getMode} from "./mode.js";
+import {getEl} from "./elements.js";
+
+const el = getEl();
 
 /** Get the collection of 10.000 Dutch kids friendly words **/
 let wordItemsUnshuffled = [];
@@ -24,6 +26,7 @@ export function loadWordItems() {
       wordItemsUnshuffled = data;
       wordItems = getShuffledArray(data)
     });
+
 }
 
 /**
@@ -46,11 +49,10 @@ export function getWordsFileName() {
 /**
  * Check if the user typed in the current random word
  * @param {string} inputValue - The text from the input field.
- * @param {HTMLElement} wordEl - The element containing the current target word data.
  * @returns {boolean}
  */
-export function isWordTyped(inputValue, wordEl) {
-  const word = wordEl.getAttribute('data-current-word');
+export function isWordTyped(inputValue) {
+  const word = el.word.getAttribute('data-current-word');
   const typedWord = inputValue.trim();
   return word.toLowerCase() === typedWord.toLowerCase();
 }
@@ -72,15 +74,12 @@ export function resetWordIndex() {
   index = 0;
 }
 
-/**
- * Get and show a new random word
- * @param {Object} el - Object containing the necessary DOM elements (word, wordImage, body).
- */
-export function getAndShowNewWord(el) {
+/** Get and show a new random word **/
+export function getAndShowNewWord() {
   const {word, image} = getWordAndImage(wordItems[index]);
 
   if (getMode() === 'brainrot' && index > 0) {
-    increaseSecondsBasedOnWord(word, el);
+    increaseSecondsBasedOnWord(word);
   }
 
   if (word === 'six seven') {
@@ -103,4 +102,17 @@ export function getAndShowNewWord(el) {
   el.body.style.setProperty("--randomHue2", getRandomHue());
 
   index = index < wordItems.length - 1 ? index + 1 : 0;
+}
+
+/**
+ * @param {Array} arr - The original array to shuffle.
+ * @returns {Array} A new array with elements in random order.
+ */
+export function getShuffledArray(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
 }

@@ -1,28 +1,24 @@
 import {getWordItems} from "./word.js";
 import {getMode} from "./mode.js";
+import {getEl} from "./elements.js";
 
 let secondsLeft = 0;
 
-/**
- * @param {string} word - The word used to calculate the time increase.
- * @param {Object} el - Object containing relevant DOM elements (countDown).
- */
-export function increaseSecondsBasedOnWord(word, el) {
+const el = getEl();
+
+/** @param {string} word - The word used to calculate the time increase. **/
+export function increaseSecondsBasedOnWord(word) {
   secondsLeft = secondsLeft + Math.round(word.length * 0.4);
   el.countDown.textContent = secondsLeft.toString();
 }
 
-/**
- * Count down from 60 to 0
- * @param {Object} el - Object containing relevant DOM elements (countDown, word, input, retryButton).
- */
-export function startCountDown(el) {
+export function startCountDown() {
   const mode = getMode();
 
   if (mode === 'youngKids') {
     secondsLeft = 300;
   } else if (mode === 'brainrot') {
-    increaseSecondsBasedOnWord(getWordItems()[0].word, el);
+    increaseSecondsBasedOnWord(getWordItems()[0].word);
   } else {
     secondsLeft = 60;
   }

@@ -19,6 +19,10 @@ export function getMode() {
   return mode;
 }
 
+export function initModeSelector() {
+  document.querySelector(`input[value="${getMode()}"]`).checked = true;
+}
+
 export function handleModeChange(e) {
   localStorage.setItem(MODE_KEY, JSON.stringify(e.target.value));
   window.location.reload();
