@@ -2,9 +2,11 @@ import {renderBrainrots} from "./brainrot.js";
 import {getMode} from "./mode.js";
 import {getEl} from "./elements.js";
 
-const HIGH_SCORE_KEY_STANDARD = 'type-the-word-high-score';
-const HIGH_SCORE_KEY_YOUNGKIDS = 'type-the-word-high-score-young-kids';
-const HIGH_SCORE_KEY_BRAINROT = 'type-the-word-high-score-brainrot';
+const HIGH_SCORE_KEY = {
+  standard: 'type-the-word-high-score',
+  youngKids: 'type-the-word-high-score-young-kids',
+  brainrot: 'type-the-word-high-score-brainrot'
+}
 
 let scoreObj = {
   current: 0,
@@ -29,23 +31,6 @@ export function renewHighScore(newScore) {
   splittedHighScore.forEach((digit, i) => {
     el.highScore.innerHTML = el.highScore.innerHTML + `<span style="--i: ${i};">${digit}</span>`
   })
-}
-
-/**
- * @returns {string} The key used for storing/retrieving the high score.
- */
-export function getHighScoreKey() {
-  const mode = getMode();
-
-  if (mode === 'brainrot') {
-    return HIGH_SCORE_KEY_BRAINROT;
-  }
-
-  if (mode === 'youngKids') {
-    return HIGH_SCORE_KEY_YOUNGKIDS;
-  }
-
-  return HIGH_SCORE_KEY_STANDARD;
 }
 
 /**
@@ -91,7 +76,7 @@ export function increaseScore() {
 
 /** Retrieve and show high score from local storage, if there is one **/
 export function initHighScore() {
-  const savedHighScoreData = localStorage.getItem(getHighScoreKey());
+  const savedHighScoreData = localStorage.getItem(HIGH_SCORE_KEY[getMode()]);
 
   if (savedHighScoreData) {
     const {score} = JSON.parse(savedHighScoreData);
@@ -102,5 +87,5 @@ export function initHighScore() {
 /** Save high score, right before the page closes **/
 export function handleHighScoreBeforeUnload() {
   const highScoreData = {score: scoreObj.high};
-  localStorage.setItem(getHighScoreKey(), JSON.stringify(highScoreData));
+  localStorage.setItem(HIGH_SCORE_KEY[getMode()], JSON.stringify(highScoreData));
 }

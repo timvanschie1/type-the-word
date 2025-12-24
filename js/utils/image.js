@@ -1,22 +1,20 @@
 import {getMode} from "./mode.js";
 
 /**
- * @param {string} image - The image identifier/filename.
+ * @param {string} imgString - The image identifier/filename.
  * @returns {string|null} The full path to the image or null if no image is provided.
  */
-export function getImageSrc(image) {
-  if (!image) return null;
+export function getImageSrc(imgString) {
+  if (!imgString) return null;
 
   return getMode() === 'youngKids'
-    ? `images/icons/${image}.svg`
-    : `images/brainrot/${image}.webp`;
+    ? `images/icons/${imgString}.svg`
+    : `images/brainrot/${imgString}.webp`;
 }
 
-/**
- * @param {string} image - The image identifier to preload.
- */
-export function preloadImage(image) {
-  const src = getImageSrc(image);
+/** @param {string} imgString - The image identifier to preload. **/
+export function preloadImage(imgString) {
+  const src = getImageSrc(imgString);
   if (!src) return;
   const preloadImg = new Image();
   preloadImg.src = src;

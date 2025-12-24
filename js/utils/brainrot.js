@@ -1,5 +1,5 @@
 import {getImageSrc} from "./image.js";
-import {getUnshuffedWordItems} from "./word.js";
+import {getWordItemUnshuffled} from "./word.js";
 import {getMode} from "./mode.js";
 
 const containerEl = document.querySelector('.js-brainrots');
@@ -16,7 +16,7 @@ export function renderBrainrots(scoredBrainrots, justScoredBrainrot) {
     return;
   }
 
-  const allBrainrots = getUnshuffedWordItems().map(item => item.image);
+  const allBrainrots = getWordItemUnshuffled().map(item => item.image);
 
   allBrainrots.forEach(brainrot => {
     const clone = cardTemplate.content.cloneNode(true);

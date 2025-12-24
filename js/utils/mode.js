@@ -1,4 +1,3 @@
-/** Local Storage Keys: **/
 const MODE_KEY = 'type-the-word-mode';
 const DEFAULT_MODE = 'standard';
 

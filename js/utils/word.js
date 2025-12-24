@@ -5,13 +5,20 @@ import {increaseSecondsBasedOnWord} from "./countdown.js";
 import {getMode} from "./mode.js";
 import {getEl} from "./elements.js";
 
+/**
+ * @typedef {Object} WordItem
+ * @property {string} word - The text to be typed.
+ * @property {string} [image] - Optional identifier for the associated image.
+ */
+
 const el = getEl();
 
-/** Get the collection of 10.000 Dutch kids friendly words **/
+/** @type {WordItem[]} */
 let wordItemsUnshuffled = [];
+/** @type {WordItem[]} */
 let wordItems = [];
 
-export function getUnshuffedWordItems() {
+export function getWordItemUnshuffled() {
   return wordItemsUnshuffled;
 }
 
@@ -32,9 +39,6 @@ export async function loadWordItems() {
   }
 }
 
-/**
- * @returns {string} The key used for storing/retrieving the high score.
- */
 export function getWordsFileName() {
   const mode = getMode();
 
@@ -49,11 +53,7 @@ export function getWordsFileName() {
   return "wordsDutch.json?v=12";
 }
 
-/**
- * Check if the user typed in the current random word
- * @param {string} inputValue - The text from the input field.
- * @returns {boolean}
- */
+/** @param {string} inputValue - The text from the input field. **/
 export function isWordTyped(inputValue) {
   const word = el.word.getAttribute('data-current-word');
   const typedWord = inputValue.trim();
@@ -61,14 +61,15 @@ export function isWordTyped(inputValue) {
 }
 
 /**
- * @param {string|Object} item - The raw data from the word list.
- * @returns {Object} An object containing at least the 'word' property.
+ * @param {string|WordItem} item - The raw data from the word list.
+ * @returns {WordItem} An object containing at least the 'word' property.
  */
 export function getWordAndImage(item) {
   if (getMode() === 'standard') {
     return {word: item}
   }
-  return item;
+
+  return {word: item.word, image: item.image}
 }
 
 let index = 0;
@@ -77,7 +78,6 @@ export function resetWordIndex() {
   index = 0;
 }
 
-/** Get and show a new random word **/
 export function getAndShowNewWord() {
   const {word, image} = getWordAndImage(wordItems[index]);
 
