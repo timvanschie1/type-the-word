@@ -43,14 +43,14 @@ export function getWordsFileName() {
   const mode = getMode();
 
   if (mode === 'youngKids') {
-    return 'wordsPerImageYoungKids.json?v=12';
+    return 'wordsPerImageYoungKids.json?v=13';
   }
 
   if (mode === 'brainrot') {
-    return 'wordsPerImageBrainrot.json?v=12';
+    return 'wordsPerImageBrainrot.json?v=13';
   }
 
-  return "wordsDutch.json?v=12";
+  return "wordsDutch.json?v=13";
 }
 
 /** @param {string} inputValue - The text from the input field. **/
