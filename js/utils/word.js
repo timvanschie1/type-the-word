@@ -85,7 +85,7 @@ export function getAndShowNewWord() {
     increaseSecondsBasedOnWord(word);
   }
 
-  if (word === 'six seven') {
+  if (word.includes('six seven')) {
     doSixSevenAnimation();
   }
 
