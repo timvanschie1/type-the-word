@@ -1,8 +1,22 @@
 /** Local Storage Keys: **/
 const MODE_KEY = 'type-the-word-mode';
+const DEFAULT_MODE = 'standard';
+
+let mode;
 
 export function getMode() {
-  return JSON.parse(localStorage.getItem(MODE_KEY)) || 'standard';
+  if (mode) {
+    return mode;
+  }
+
+  try {
+    const saved = localStorage.getItem(MODE_KEY);
+    mode = saved ? JSON.parse(saved) : DEFAULT_MODE;
+  } catch (e) {
+    mode = DEFAULT_MODE;
+  }
+
+  return mode;
 }
 
 export function handleModeChange(e) {

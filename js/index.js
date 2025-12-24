@@ -1,8 +1,9 @@
 import {getMode, handleModeChange} from "./utils/mode.js";
-import {getAndShowNewWord, isWordTyped, loadWordItems} from "./utils/word.js";
+import {getAndShowNewWord, isWordTyped, loadWordItems, resetWordIndex} from "./utils/word.js";
 import {startCountDown} from "./utils/countdown.js";
 import {handleHighScoreBeforeUnload, increaseScore, initHighScore, setScore} from "./utils/score.js";
 import {initAnimations} from "./utils/animation.js";
+import {renderBrainrots} from "./utils/brainrot.js";
 
 const el = {
   word: document.querySelector('.js-current-word'),
@@ -17,32 +18,52 @@ const el = {
   countDown: document.querySelector('.js-count-down'),
   scoreContainer: document.querySelector('.js-score-container'),
   score: document.querySelector('.js-score'),
+  brainrotToggle: document.querySelector('.js-brainrot-toggle'),
   body: document.querySelector('body'),
 }
 
 const mode = getMode();
 document.querySelector(`input[value="${mode}"]`).checked = true;
 
-loadWordItems(mode);
-initHighScore(mode, el);
+loadWordItems();
+initHighScore(el);
 initAnimations();
 
 /** Handle every keystroke in the input field **/
 el.input.addEventListener('input', (e) => {
-  if (isWordTyped(e.target.value, el.word)) {
-    increaseScore(el);
-    getAndShowNewWord(mode, el);
-    el.input.value = '';
+  if (!isWordTyped(e.target.value, el.word)) {
+    return;
   }
+
+  function updateGameState ()  {
+    increaseScore(el);
+    getAndShowNewWord(el);
+  }
+
+  if (document.startViewTransition && getMode() === 'brainrot') {
+    document.startViewTransition(updateGameState);
+  } else {
+    updateGameState();
+  }
+
+  el.input.value = '';
 })
 
+window.addEventListener("beforeunload", handleHighScoreBeforeUnload);
 
-window.addEventListener("beforeunload", () => handleHighScoreBeforeUnload(mode));
+el.startButton.addEventListener('click', reset);
+el.retryButton.addEventListener('click', reset);
+
+el.modeRadioButtons.forEach(el => {
+  el.addEventListener('change', handleModeChange);
+});
 
 function reset() {
-  startCountDown(mode, el);
-  setScore(0, el);
-  getAndShowNewWord(mode, el);
+  resetWordIndex();
+  startCountDown(el);
+  setScore(undefined, el);
+  renderBrainrots([]);
+  getAndShowNewWord(el);
 
   el.countDownContainer.classList.remove('hidden');
   el.scoreContainer.classList.remove('hidden');
@@ -53,10 +74,3 @@ function reset() {
   el.input.value = '';
   el.input.focus();
 }
-
-el.startButton.addEventListener('click', reset);
-el.retryButton.addEventListener('click', reset);
-
-el.modeRadioButtons.forEach(el => {
-  el.addEventListener('change', handleModeChange);
-});

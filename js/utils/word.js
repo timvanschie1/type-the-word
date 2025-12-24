@@ -2,22 +2,36 @@ import {getImageSrc, preloadImage} from "./image.js";
 import {getRandomHue} from "./color.js";
 import {getShuffledArray} from "./array.js";
 import {doSixSevenAnimation} from "./animation.js";
+import {increaseSecondsBasedOnWord} from "./countdown.js";
+import {getMode} from "./mode.js";
 
 /** Get the collection of 10.000 Dutch kids friendly words **/
+let wordItemsUnshuffled = [];
 let wordItems = [];
 
-/** @param {string} mode - The current game mode. **/
-export function loadWordItems(mode) {
-  fetch(getWordsFileName(mode))
+export function getUnshuffedWordItems() {
+  return wordItemsUnshuffled;
+}
+
+export function getWordItems() {
+  return wordItems;
+}
+
+export function loadWordItems() {
+  fetch(getWordsFileName())
     .then(r => r.json())
-    .then(data => wordItems = getShuffledArray(data));
+    .then(data => {
+      wordItemsUnshuffled = data;
+      wordItems = getShuffledArray(data)
+    });
 }
 
 /**
- * @param {string} mode - The current game mode.
  * @returns {string} The key used for storing/retrieving the high score.
  */
-export function getWordsFileName(mode) {
+export function getWordsFileName() {
+  const mode = getMode();
+
   if (mode === 'youngKids') {
     return 'wordsPerImageYoungKids.json?v=12';
   }
@@ -43,11 +57,10 @@ export function isWordTyped(inputValue, wordEl) {
 
 /**
  * @param {string|Object} item - The raw data from the word list.
- * @param {string} mode - The current game mode.
  * @returns {Object} An object containing at least the 'word' property.
  */
-export function getWordAndImage(item, mode) {
-  if (mode === 'standard') {
+export function getWordAndImage(item) {
+  if (getMode() === 'standard') {
     return {word: item}
   }
   return item;
@@ -55,25 +68,33 @@ export function getWordAndImage(item, mode) {
 
 let index = 0;
 
+export function resetWordIndex() {
+  index = 0;
+}
+
 /**
  * Get and show a new random word
- * @param {string} mode - The current active game mode.
  * @param {Object} el - Object containing the necessary DOM elements (word, wordImage, body).
  */
-export function getAndShowNewWord(mode, el) {
-  const {word, image} = getWordAndImage(wordItems[index], mode);
+export function getAndShowNewWord(el) {
+  const {word, image} = getWordAndImage(wordItems[index]);
+
+  if (getMode() === 'brainrot' && index > 0) {
+    increaseSecondsBasedOnWord(word, el);
+  }
 
   if (word === 'six seven') {
     doSixSevenAnimation(word);
   }
 
   const {image: nextImage} = wordItems[index + 1];
-  nextImage && preloadImage(nextImage, mode);
+  nextImage && preloadImage(nextImage);
 
   el.word.setAttribute('data-current-word', word);
 
   if (image) {
-    el.wordImage.src = getImageSrc(image, mode);
+    el.wordImage.style.viewTransitionName = image;
+    el.wordImage.src = getImageSrc(image);
     el.wordImage.classList.remove('hidden');
   }
 

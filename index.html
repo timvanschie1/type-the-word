@@ -10,6 +10,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Changa:wght@200..600&display=block" rel="stylesheet">
     <title>Typ het woord!</title>
     <link rel="stylesheet" href="css/index.css?v=11">
+    <link rel="stylesheet" href="css/current-word.css?v=11">
+    <link rel="stylesheet" href="css/brainrots.css?v=11">
 </head>
 <body style="--randomHue1: 0; --randomHue2: 0;">
 
@@ -26,6 +28,7 @@
 <div class="score-container js-score-container hidden">
     <h1>Jouw score</h1>
     <div class="score js-score"><span>0</span></div>
+    <div class="brainrots js-brainrots"></div>
 </div>
 
 <div class="current-word-container js-current-word-container">
@@ -54,6 +57,12 @@
         <label for="youngKids">Jonge kids</label>
     </div>
 </div>
+
+<template id="brainrot-card-template">
+    <div class="brainrot-card">
+        <img src="" alt="" title="">
+    </div>
+</template>
 
 <script src="js/index.js?v=11" type="module"></script>
 </body>

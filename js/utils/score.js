@@ -1,11 +1,15 @@
+import {renderBrainrots} from "./brainrot.js";
+import {getMode} from "./mode.js";
+
 const HIGH_SCORE_KEY_STANDARD = 'type-the-word-high-score';
 const HIGH_SCORE_KEY_YOUNGKIDS = 'type-the-word-high-score-young-kids';
 const HIGH_SCORE_KEY_BRAINROT = 'type-the-word-high-score-brainrot';
 
-const scoreObj = {
+let scoreObj = {
   current: 0,
+  brainrots: [],
   high: 0
-}
+};
 
 /**
  * Set and show the highscore
@@ -26,10 +30,11 @@ export function renewHighScore(newScore, el) {
 }
 
 /**
- * @param {string} mode - The current game mode.
  * @returns {string} The key used for storing/retrieving the high score.
  */
-export function getHighScoreKey(mode) {
+export function getHighScoreKey() {
+  const mode = getMode();
+
   if (mode === 'brainrot') {
     return HIGH_SCORE_KEY_BRAINROT;
   }
@@ -43,13 +48,19 @@ export function getHighScoreKey(mode) {
 
 /**
  * Updates the current game score and refreshes the UI.
- * @param {number} newScore - The new score value to set.
+ * @param {Object} [newScoreObj] - The new score object to set.
  * @param {Object} el - Object containing the DOM elements (score).
  */
-export function setScore(newScore, el) {
-  scoreObj.current = newScore;
+export function setScore(newScoreObj, el) {
+  if (newScoreObj) {
+    scoreObj = newScoreObj;
+  } else {
+    scoreObj.current = 0;
+    scoreObj.brainrots = [];
+  }
+
   el.score.innerHTML = "";
-  const splittedScore = newScore.toString().split("");
+  const splittedScore = scoreObj.current.toString().split("");
   splittedScore.forEach((digit, i) => {
     el.score.innerHTML = el.score.innerHTML + `<span style="--i: ${i};">${digit}</span>`
   })
@@ -60,21 +71,32 @@ export function setScore(newScore, el) {
  * @param {Object} el - Object containing the DOM elements (word, score, etc.).
  */
 export function increaseScore(el) {
-  const newScore = scoreObj.current + el.word.getAttribute('data-current-word').length * 10;
-  setScore(newScore, el);
+  const word = el.word.getAttribute('data-current-word');
 
-  if (newScore > Number(scoreObj.high)) {
-    renewHighScore(newScore, el);
+  const newScoreObj = {
+    ...scoreObj,
+    current: scoreObj.current + word.length * 10,
+  }
+
+  if (getMode() === 'brainrot') {
+    const brainrot = word.replaceAll(' ', '-');
+    newScoreObj.brainrots.push(brainrot);
+    renderBrainrots(newScoreObj.brainrots, brainrot);
+  }
+
+  setScore(newScoreObj, el);
+
+  if (newScoreObj.current > Number(scoreObj.high)) {
+    renewHighScore(newScoreObj.current, el);
   }
 }
 
 /**
  * Retrieve and show high score from local storage, if there is one
- * @param {string} mode - The current game mode.
  * @param {Object} el - Object containing the DOM elements for high score display.
  */
-export function initHighScore(mode, el) {
-  const savedHighScoreData = localStorage.getItem(getHighScoreKey(mode));
+export function initHighScore(el) {
+  const savedHighScoreData = localStorage.getItem(getHighScoreKey());
 
   if (savedHighScoreData) {
     const {score} = JSON.parse(savedHighScoreData);
@@ -82,11 +104,8 @@ export function initHighScore(mode, el) {
   }
 }
 
-/**
- * Save high score, right before the page closes
- * @param {string} mode - The current game mode.
- */
-export function handleHighScoreBeforeUnload(mode) {
+/** Save high score, right before the page closes **/
+export function handleHighScoreBeforeUnload() {
   const highScoreData = {score: scoreObj.high};
-  localStorage.setItem(getHighScoreKey(mode), JSON.stringify(highScoreData));
+  localStorage.setItem(getHighScoreKey(), JSON.stringify(highScoreData));
 }
