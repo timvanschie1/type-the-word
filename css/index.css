@@ -171,6 +171,7 @@ body:has(img[src*='.webp']) .count-down-container {
 
 /** Added to the html element via JS **/
 .six-seven-animation {
+    overflow: hidden;
     animation: sixSeven 0.7s linear;
     animation-iteration-count: 4;
 }

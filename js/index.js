@@ -6,10 +6,10 @@ import {initAnimations} from "./utils/animation.js";
 import {renderBrainrots} from "./utils/brainrot.js";
 import {getEl} from "./utils/elements.js";
 
+initAnimations();
 initModeSelector();
 loadWordItems();
 initHighScore();
-initAnimations();
 
 const el = getEl();
 
@@ -44,10 +44,10 @@ el.modeRadioButtons.forEach(el => {
 
 function reset() {
   resetWordIndex();
-  startCountDown(el);
-  setScore(undefined, el);
+  startCountDown();
+  setScore(undefined);
   renderBrainrots([]);
-  getAndShowNewWord(el);
+  getAndShowNewWord();
 
   el.countDownContainer.classList.remove('hidden');
   el.scoreContainer.classList.remove('hidden');

@@ -83,7 +83,7 @@ export function getAndShowNewWord() {
   }
 
   if (word === 'six seven') {
-    doSixSevenAnimation(word);
+    doSixSevenAnimation();
   }
 
   const {image: nextImage} = wordItems[index + 1];
