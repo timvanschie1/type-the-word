@@ -2,30 +2,37 @@ import {getWordItems} from "./word.js";
 import {getMode} from "./mode.js";
 import {getEl} from "./elements.js";
 
+const TIME_CONFIG = {
+  youngKids: 300,
+  standard: 60,
+  bonusMultiplier: 0.4
+};
+
 let secondsLeft = 0;
 
 const el = getEl();
 
 /** @param {string} word - The word used to calculate the time increase. **/
 export function increaseSecondsBasedOnWord(word) {
-  secondsLeft = secondsLeft + Math.round(word.length * 0.4);
+  secondsLeft = secondsLeft + Math.round(word.length * TIME_CONFIG.bonusMultiplier);
   el.countDown.textContent = secondsLeft.toString();
 }
 
-export function startCountDown() {
-  const mode = getMode();
+let countDownInterval;
 
-  if (mode === 'youngKids') {
-    secondsLeft = 300;
-  } else if (mode === 'brainrot') {
+export function startCountDown() {
+  clearInterval(countDownInterval);
+
+  const mode = getMode();
+  if (mode === 'brainrot') {
     increaseSecondsBasedOnWord(getWordItems()[0].word);
   } else {
-    secondsLeft = 60;
+    secondsLeft = TIME_CONFIG[mode];
   }
 
   el.countDown.textContent = secondsLeft.toString();
 
-  const countDownInterval = setInterval(() => {
+  countDownInterval = setInterval(() => {
     secondsLeft--;
 
     el.countDown.textContent = secondsLeft.toString();

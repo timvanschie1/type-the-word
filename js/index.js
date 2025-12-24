@@ -6,9 +6,9 @@ import {initAnimations} from "./utils/animation.js";
 import {renderBrainrots} from "./utils/brainrot.js";
 import {getEl} from "./utils/elements.js";
 
+await loadWordItems();
 initAnimations();
 initModeSelector();
-loadWordItems();
 initHighScore();
 
 const el = getEl();

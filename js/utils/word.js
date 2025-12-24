@@ -19,14 +19,17 @@ export function getWordItems() {
   return wordItems;
 }
 
-export function loadWordItems() {
-  fetch(getWordsFileName())
-    .then(r => r.json())
-    .then(data => {
-      wordItemsUnshuffled = data;
-      wordItems = getShuffledArray(data)
-    });
-
+export async function loadWordItems() {
+  try {
+    const response = await fetch(getWordsFileName());
+    const data = await response.json();
+    wordItemsUnshuffled = data;
+    wordItems = getShuffledArray(data);
+    return true;
+  } catch (error) {
+    console.error("Failed to load words:", error);
+    return false;
+  }
 }
 
 /**
