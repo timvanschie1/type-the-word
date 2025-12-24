@@ -2,16 +2,14 @@
     --width: 6rem;
     --spacing: 0.6rem;
     position: fixed;
-    top: 22vmin;
+    top: 30vmin;
     right: 0;
     width: var(--width);
-    height: calc(6 * var(--width) + 2 * var(--spacing));
+    height: min(60vh, calc(5 * var(--width) + 2 * var(--spacing)));
     display: flex;
     flex-direction: column;
     gap: var(--spacing);
     padding: var(--spacing);
-    border-radius: 1rem 0 0 1rem;
-    background: rgba(0 0 0 / 0.1);
     overflow: auto;
     overscroll-behavior: contain;
 
@@ -20,6 +18,7 @@
     }
 
     .brainrot-card {
+        position: relative;
         flex-shrink: 0;
         display: flex;
         align-items: center;
@@ -30,7 +29,7 @@
         border-radius: 1rem;
         padding: var(--spacing);
         filter: drop-shadow(1px 1px 1px rgb(0 0 0 / 40%));
-        background: linear-gradient(var(--angle), var(--color-1), var(--color-2));
+        background: rgba(0 0 0 / 0.1);
 
         img[src=""] {
             display: none;

@@ -1,15 +1,15 @@
 import {getEl} from "./elements.js";
 
-const {body} = getEl();
+const el = getEl();
 
 export function initAnimations() {
-  body.addEventListener('animationend', (e) => {
+  el.body.addEventListener('animationend', (e) => {
     if (e.animationName === 'sixSeven') {
-      body.classList.remove('six-seven-animation');
+      el.body.classList.remove('six-seven-animation');
     }
   });
 }
 
 export function doSixSevenAnimation() {
-  body.classList.add('six-seven-animation');
+  el.body.classList.add('six-seven-animation');
 }
