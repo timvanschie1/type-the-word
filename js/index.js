@@ -1,5 +1,5 @@
 import {getMode, handleModeChange, initMode} from "./utils/mode.js";
-import {getAndShowNewWord, isWordTyped, loadWordItems, resetWordIndex} from "./utils/word.js";
+import {getAndShowNewWord, getWordItemUnshuffled, isWordTyped, loadWordItems, resetWordIndex} from "./utils/word.js";
 import {startCountDown} from "./utils/countdown.js";
 import {handleHighScoreBeforeUnload, increaseScore, initHighScore, setScore} from "./utils/score.js";
 import {initAnimations} from "./utils/animation.js";
@@ -46,7 +46,7 @@ function reset() {
   resetWordIndex();
   startCountDown();
   setScore(undefined);
-  renderBrainrots([]);
+  renderBrainrots([], getWordItemUnshuffled());
   getAndShowNewWord();
 
   el.countDownContainer.classList.remove('hidden');

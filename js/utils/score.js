@@ -1,6 +1,7 @@
 import {renderBrainrots} from "./brainrot.js";
 import {getMode} from "./mode.js";
 import {getEl} from "./elements.js";
+import {getWordItemUnshuffled} from "./word.js";
 
 const HIGH_SCORE_KEY = {
   standard: 'type-the-word-high-score',
@@ -64,7 +65,7 @@ export function increaseScore() {
   if (getMode() === 'brainrot') {
     const brainrot = word.replaceAll(' ', '-');
     newScoreObj.brainrots.push(brainrot);
-    renderBrainrots(newScoreObj.brainrots, brainrot);
+    renderBrainrots(newScoreObj.brainrots, getWordItemUnshuffled(), brainrot);
   }
 
   setScore(newScoreObj);

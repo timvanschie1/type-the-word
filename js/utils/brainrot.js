@@ -1,5 +1,4 @@
 import {getImageSrc} from "./image.js";
-import {getWordItemUnshuffled} from "./word.js";
 import {getMode} from "./mode.js";
 
 const containerEl = document.querySelector('.js-brainrots');
@@ -7,16 +6,17 @@ const cardTemplate = document.querySelector('#brainrot-card-template');
 
 /**
  * @param {string[]} scoredBrainrots - Array of brainrot identifiers (slugs) that have been unlocked.
+ * @param {Object[]} allBrainrotItems - The full list of word items.
  * @param {string} [justScoredBrainrot] - The identifier of the brainrot that was just scored/added (optional).
  */
-export function renderBrainrots(scoredBrainrots, justScoredBrainrot) {
+export function renderBrainrots(scoredBrainrots, allBrainrotItems, justScoredBrainrot) {
   containerEl.innerHTML = '';
 
   if (getMode() !== 'brainrot') {
     return;
   }
 
-  const allBrainrots = getWordItemUnshuffled().map(item => item.image);
+  const allBrainrots = allBrainrotItems.map(item => item.image);
 
   allBrainrots.forEach(brainrot => {
     const clone = cardTemplate.content.cloneNode(true);
