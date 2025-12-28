@@ -40,15 +40,15 @@ input[type="radio"] {
     font: inherit;
     color: currentColor;
     width: 1.15em;
+    height: auto;
     aspect-ratio: 1;
-    border: 0.15em solid currentColor;
     border-radius: 50%;
     transform: translateY(-0.075em);
 
     &::before {
         content: "";
         width: 0.65em;
-        height: 0.65em;
+        aspect-ratio: 1;
         border-radius: 50%;
         transform: scale(0);
         transition: 120ms transform ease-in-out;
@@ -88,7 +88,7 @@ h1 {
 }
 
 body:has(img[src*='.webp']) .count-down-container {
-    h1 {
+    & h1 {
         font-size: 3vmin;
     }
 
@@ -103,7 +103,7 @@ body:has(img[src*='.webp']) .count-down-container {
     font-size: 12vmin;
     line-height: 1;
 
-    span {
+    & span {
         position: relative;
         display: inline-block;
 
