@@ -1,4 +1,4 @@
-import {getImageSrc, preloadImage} from "./image.js";
+import {preloadImage, renderImage} from "./image.js";
 import {getRandomHue} from "./color.js";
 import {doSixSevenAnimation} from "./animation.js";
 import {increaseSecondsBasedOnWord} from "./countdown.js";
@@ -11,16 +11,10 @@ import {getEl} from "./elements.js";
  * @property {string} [image] - Optional identifier for the associated image.
  */
 
-const el = getEl();
-
-/** @type {WordItem[]} */
-let wordItemsUnshuffled = [];
 /** @type {WordItem[]} */
 let wordItems = [];
 
-export function getWordItemUnshuffled() {
-  return wordItemsUnshuffled;
-}
+const el = getEl();
 
 export function getWordItems() {
   return wordItems;
@@ -30,7 +24,6 @@ export async function loadWordItems() {
   try {
     const response = await fetch(getWordsFileName());
     const data = await response.json();
-    wordItemsUnshuffled = data;
     wordItems = getShuffledArray(data);
     return true;
   } catch (error) {
@@ -43,14 +36,14 @@ export function getWordsFileName() {
   const mode = getMode();
 
   if (mode === 'youngKids') {
-    return 'wordsPerImageYoungKids.json?v=17';
+    return 'wordsPerImageYoungKids.json?v=18';
   }
 
   if (mode === 'brainrot') {
-    return 'wordsPerImageBrainrot.json?v=17';
+    return 'wordsPerImageBrainrot.json?v=18';
   }
 
-  return "wordsDutch.json?v=17";
+  return "wordsDutch.json?v=18";
 }
 
 /** @param {string} inputValue - The text from the input field. **/
@@ -95,9 +88,7 @@ export function getAndShowNewWord() {
   el.word.setAttribute('data-current-word', word);
 
   if (image) {
-    el.wordImage.style.viewTransitionName = image;
-    el.wordImage.src = getImageSrc(image);
-    el.wordImage.classList.remove('hidden');
+    renderImage(image);
   }
 
   /** We also set two random Hues **/

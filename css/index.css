@@ -114,6 +114,11 @@ body:has(img[src*='.webp']) .count-down-container {
     }
 }
 
+.score-level,
+.high-score-level {
+    font-size: 3vmin;
+}
+
 .high-score-container {
     top: 2vmin;
     left: 3vmin;

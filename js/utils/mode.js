@@ -3,8 +3,11 @@ import {getEl} from "./elements.js";
 const MODE_KEY = 'type-the-word-mode';
 const DEFAULT_MODE = 'standard';
 
+const el = getEl();
+
 let mode;
 
+/** @returns {'standard' | 'brainrot' | 'youngKids'} **/
 export function getMode() {
   if (mode) {
     return mode;
@@ -23,7 +26,7 @@ export function getMode() {
 export function initMode() {
   const mode = getMode();
   document.querySelector(`input[value="${mode}"]`).checked = true;
-  getEl().body.classList.add(`mode--${mode}`);
+  el.body.classList.add(`mode--${mode}`);
 }
 
 export function handleModeChange(e) {

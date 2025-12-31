@@ -1,92 +1,133 @@
 import {renderBrainrots} from "./brainrot.js";
 import {getMode} from "./mode.js";
 import {getEl} from "./elements.js";
-import {getWordItemUnshuffled} from "./word.js";
+import {getWordItems} from "./word.js";
 
 const HIGH_SCORE_KEY = {
-  standard: 'type-the-word-high-score',
-  youngKids: 'type-the-word-high-score-young-kids',
-  brainrot: 'type-the-word-high-score-brainrot'
+  standard: 'type-the-word-high-score-4',
+  youngKids: 'type-the-word-high-score-young-kids-4',
+  brainrot: 'type-the-word-high-score-brainrot-4'
 }
 
+/** @typedef {string} ImgString**/
+
+/**
+ * @typedef {Object} ScoreObject
+ * @property {number | ImgString[]} score
+ * @property {number} level
+ */
+
+/** @type {ScoreObject} */
 let scoreObj = {
-  current: 0,
-  brainrots: [],
-  high: 0
+  score: 0,
+  level: 1,
 };
+
+/** @type {ScoreObject} */
+let highScoreObj = {
+  score: 0,
+  level: 1,
+}
 
 const el = getEl();
 
-/**
- * Set and show the highscore
- * @param {number} newScore - The new score value to be recorded as the high score.
- */
-export function renewHighScore(newScore) {
-  scoreObj.high = newScore;
+export function getLevel() {
+  return scoreObj.level
+}
 
-  const splittedHighScore = newScore.toString().split("");
+/** @param {'score' | 'highScore'} type - The type of score to render. **/
+function renderScore(type) {
+  const mode = getMode();
+  const {score, level} = type === 'highScore' ? highScoreObj : scoreObj;
 
-  el.highScoreContainer.classList.remove("hidden");
-  el.highScore.innerHTML = "";
+  let scoreEl;
+  let levelEl;
+  if (type === 'highScore') {
+    scoreEl = el.highScore;
+    levelEl = el.highScoreLevel;
+    el.highScoreContainer.classList.remove("hidden");
+  } else {
+    scoreEl = el.score;
+    levelEl = el.scoreLevel;
+  }
 
-  splittedHighScore.forEach((digit, i) => {
-    el.highScore.innerHTML = el.highScore.innerHTML + `<span style="--i: ${i};">${digit}</span>`
+  let scoreString;
+  if (mode === 'brainrot') {
+    scoreString = score.length + '/' + getWordItems().length;
+    levelEl.classList.remove('hidden');
+    levelEl.textContent = 'Level ' + level.toString();
+  } else {
+    scoreString = score.toString();
+  }
+
+  const splittedScore = scoreString.split("");
+
+  scoreEl.innerHTML = "";
+  splittedScore.forEach((char, i) => {
+    scoreEl.innerHTML = scoreEl.innerHTML + `<span style="--i: ${i};">${char}</span>`
   })
 }
 
-/**
- * Updates the current game score and refreshes the UI.
- * @param {Object} [newScoreObj] - The new score object to set.
- */
-export function setScore(newScoreObj) {
-  if (newScoreObj) {
-    scoreObj = newScoreObj;
-  } else {
-    scoreObj.current = 0;
-    scoreObj.brainrots = [];
-  }
-
-  el.score.innerHTML = "";
-  const splittedScore = scoreObj.current.toString().split("");
-  splittedScore.forEach((digit, i) => {
-    el.score.innerHTML = el.score.innerHTML + `<span style="--i: ${i};">${digit}</span>`
-  })
+export function resetScore() {
+  scoreObj.score = getMode() === 'brainrot' ? [] : 0;
+  renderScore('score');
 }
 
 /** Increase and show the score (and if needed also the highscore) **/
 export function increaseScore() {
-  const word = el.word.getAttribute('data-current-word');
-
-  const newScoreObj = {
-    ...scoreObj,
-    current: scoreObj.current + word.length * 10,
-  }
-
   if (getMode() === 'brainrot') {
-    const brainrot = word.replaceAll(' ', '-');
-    newScoreObj.brainrots.push(brainrot);
-    renderBrainrots(newScoreObj.brainrots, getWordItemUnshuffled(), brainrot);
+    const brainrot = el.wordImage.getAttribute('data-image');
+    const isBrainrotsComplete = scoreObj.score.length + 1 === getWordItems().length;
+
+    if (isBrainrotsComplete) {
+      scoreObj.score = [];
+      scoreObj.level++;
+      renderBrainrots(scoreObj.score, getWordItems());
+    } else {
+      scoreObj.score.push(brainrot);
+      renderBrainrots(scoreObj.score, getWordItems(), brainrot);
+    }
+
+    const levelIncreased = scoreObj.level > highScoreObj.level;
+    const scoreIncreased = scoreObj.level === highScoreObj.level && scoreObj.score.length > highScoreObj.score.length;
+
+    if (levelIncreased || scoreIncreased) {
+      highScoreObj.score = [...scoreObj.score];
+      highScoreObj.level = scoreObj.level;
+      renderScore('highScore');
+    }
+
+    renderScore('score');
+    return;
   }
 
-  setScore(newScoreObj);
+  const currentWord = el.word.getAttribute('data-current-word');
+  const newScore = scoreObj.score + currentWord.length * 10;
+  scoreObj.score = newScore;
+  renderScore('score');
 
-  if (newScoreObj.current > Number(scoreObj.high)) {
-    renewHighScore(newScoreObj.current);
+  if (newScore > Number(highScoreObj.score)) {
+    highScoreObj.score = newScore;
+    renderScore('highScore');
   }
 }
 
 /** Retrieve and show high score from local storage, if there is one **/
 export function initHighScore() {
-  const savedHighScoreData = localStorage.getItem(HIGH_SCORE_KEY[getMode()]);
+  const mode = getMode();
+  const savedHighScoreData = localStorage.getItem(HIGH_SCORE_KEY[mode]);
+  const parsedSavedHighScoreData = JSON.parse(savedHighScoreData);
 
-  if (savedHighScoreData) {
-    const {score} = JSON.parse(savedHighScoreData);
-    renewHighScore(score);
+  if (parsedSavedHighScoreData) {
+    highScoreObj = parsedSavedHighScoreData;
+    scoreObj.level = highScoreObj.level;
+  } else {
+    highScoreObj.score = mode === 'brainrot' ? [] : 0;
   }
+  renderScore('highScore');
 }
 
 /** Save high score, right before the page closes **/
 export function handleHighScoreBeforeUnload() {
-  const highScoreData = {score: scoreObj.high};
-  localStorage.setItem(HIGH_SCORE_KEY[getMode()], JSON.stringify(highScoreData));
+  localStorage.setItem(HIGH_SCORE_KEY[getMode()], JSON.stringify(highScoreObj));
 }

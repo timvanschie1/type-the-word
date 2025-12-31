@@ -23,7 +23,8 @@ export function renderBrainrots(scoredBrainrots, allBrainrotItems, justScoredBra
 
     if (scoredBrainrots.includes(brainrot)) {
       const img = clone.querySelector('img');
-      img.style.viewTransitionName = brainrot;
+      img.style.viewTransitionName = brainrot.replace('.', '-');
+      img.dataset.image = brainrot;
       img.src = getImageSrc(brainrot);
     }
 
@@ -31,7 +32,7 @@ export function renderBrainrots(scoredBrainrots, allBrainrotItems, justScoredBra
   });
 
   if (justScoredBrainrot) {
-    containerEl.querySelector(`img[src="${getImageSrc(justScoredBrainrot)}"]`).scrollIntoView({
+    containerEl.querySelector(`img[data-image="${justScoredBrainrot}"]`).scrollIntoView({
       block: 'center'
     })
   }

@@ -17,7 +17,7 @@ export function initAnimations() {
     button.addEventListener('mouseenter', () => button.classList.add('hover'))
     button.addEventListener('mouseleave', () => {
       if (isTransitioning) {
-        button.addEventListener('transitionend', (e) => button.classList.remove('hover'), {once: true})
+        button.addEventListener('transitionend', () => button.classList.remove('hover'), {once: true})
       } else {
         button.classList.remove('hover')
       }

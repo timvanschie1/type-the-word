@@ -1,7 +1,13 @@
 import {getMode, handleModeChange, initMode} from "./utils/mode.js";
-import {getAndShowNewWord, getWordItemUnshuffled, isWordTyped, loadWordItems, resetWordIndex} from "./utils/word.js";
+import {
+  getAndShowNewWord,
+  getWordItems,
+  isWordTyped,
+  loadWordItems,
+  resetWordIndex
+} from "./utils/word.js";
 import {startCountDown} from "./utils/countdown.js";
-import {handleHighScoreBeforeUnload, increaseScore, initHighScore, setScore} from "./utils/score.js";
+import {handleHighScoreBeforeUnload, increaseScore, initHighScore, resetScore} from "./utils/score.js";
 import {initAnimations} from "./utils/animation.js";
 import {renderBrainrots} from "./utils/brainrot.js";
 import {getEl} from "./utils/elements.js";
@@ -45,8 +51,8 @@ el.modeRadioButtons.forEach(el => {
 function reset() {
   resetWordIndex();
   startCountDown();
-  setScore(undefined);
-  renderBrainrots([], getWordItemUnshuffled());
+  resetScore();
+  renderBrainrots([], getWordItems());
   getAndShowNewWord();
 
   el.countDownContainer.classList.remove('hidden');
