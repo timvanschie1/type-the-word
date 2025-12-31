@@ -1,12 +1,11 @@
-import {renderBrainrots} from "./brainrot.js";
 import {getMode} from "./mode.js";
 import {getEl} from "./elements.js";
-import {getWordItems, shuffleWordItems} from "./word.js";
+import {getWordItems} from "./word.js";
 
 const HIGH_SCORE_KEY = {
-  standard: 'type-the-word-high-score-7',
-  youngKids: 'type-the-word-high-score-young-kids-7',
-  brainrot: 'type-the-word-high-score-brainrot-7'
+  standard: 'type-the-word-high-score-10',
+  youngKids: 'type-the-word-high-score-young-kids-10',
+  brainrot: 'type-the-word-high-score-brainrot-10'
 }
 
 /** @typedef {string} ImgString**/
@@ -31,8 +30,8 @@ let highScoreObj = {
 
 const el = getEl();
 
-export function getLevel() {
-  return scoreObj.level
+export function getScoreObject() {
+  return scoreObj;
 }
 
 /** @param {'score' | 'highScore'} type - The type of score to render. **/
@@ -73,20 +72,18 @@ export function resetScore() {
   renderScore('score');
 }
 
-/** Increase and show the score (and if needed also the highscore) **/
+/** @returns {string | undefined} **/
 export function increaseScore() {
   if (getMode() === 'brainrot') {
-    const brainrot = el.wordImage.getAttribute('data-image');
-    const isBrainrotsComplete = scoreObj.score.length + 1 === getWordItems().length;
+    const wordItems = getWordItems();
+    const isBrainrotsComplete = scoreObj.score.length + 1 === wordItems.length;
+    const brainrotToAdd = el.wordImage.getAttribute('data-image');
 
     if (isBrainrotsComplete) {
       scoreObj.score = [];
       scoreObj.level++;
-      shuffleWordItems();
-      renderBrainrots(scoreObj.score, getWordItems());
     } else {
-      scoreObj.score.push(brainrot);
-      renderBrainrots(scoreObj.score, getWordItems(), brainrot);
+      scoreObj.score.push(brainrotToAdd);
     }
 
     const levelIncreased = scoreObj.level > highScoreObj.level;
@@ -99,7 +96,7 @@ export function increaseScore() {
     }
 
     renderScore('score');
-    return;
+    return brainrotToAdd;
   }
 
   const currentWord = el.word.getAttribute('data-current-word');

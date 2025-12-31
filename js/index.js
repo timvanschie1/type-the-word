@@ -1,7 +1,6 @@
 import {getMode, handleModeChange, initMode} from "./utils/mode.js";
 import {
   getAndShowNewWord,
-  getWordItems,
   isWordTyped,
   loadWordItems,
   shuffleWordItems
@@ -21,13 +20,19 @@ const el = getEl();
 
 /** Handle every keystroke in the input field **/
 el.input.addEventListener('input', (e) => {
+  const mode = getMode();
+
   if (!isWordTyped(e.target.value)) {
     return;
   }
 
-  function updateGameState ()  {
-    increaseScore();
+  function updateGameState() {
+    const justAddedBrainrot = increaseScore();
     getAndShowNewWord();
+
+    if (mode === 'brainrot') {
+      renderBrainrots(justAddedBrainrot);
+    }
   }
 
   if (document.startViewTransition && getMode() === 'brainrot') {
@@ -52,7 +57,7 @@ function reset() {
   startCountDown();
   resetScore();
   shuffleWordItems();
-  renderBrainrots([], getWordItems());
+  renderBrainrots();
   getAndShowNewWord();
 
   el.countDownContainer.classList.remove('hidden');

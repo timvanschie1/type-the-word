@@ -1,7 +1,7 @@
 import {getWordItems} from "./word.js";
 import {getMode} from "./mode.js";
 import {getEl} from "./elements.js";
-import {getLevel} from "./score.js";
+import {getScoreObject} from "./score.js";
 
 const TIME_CONFIG = {
   youngKids: 300,
@@ -18,7 +18,7 @@ const el = getEl();
 export function increaseSecondsBasedOnWord(word) {
   /** Calculate multiplier: starts high, decreases as level increases **/
   const levelAdjustedMultiplier = Math.max(
-    TIME_CONFIG.bonusMultiplier - (getLevel() * TIME_CONFIG.levelDifficultyScale)
+    TIME_CONFIG.bonusMultiplier - (getScoreObject().level * TIME_CONFIG.levelDifficultyScale)
   );
 
   const secondsToAdd = Math.round(word.length * levelAdjustedMultiplier);

@@ -26,7 +26,6 @@ export function getWordItems() {
 }
 
 export function shuffleWordItems() {
-  activeWordIndex = 0;
   wordItems = getShuffledArray(originalWordItems, getMode() === 'brainrot' ? 40 : undefined);
 }
 
@@ -46,14 +45,14 @@ export function getWordsFileName() {
   const mode = getMode();
 
   if (mode === 'youngKids') {
-    return 'wordsPerImageYoungKids.json?v=20';
+    return 'wordsPerImageYoungKids.json?v=21';
   }
 
   if (mode === 'brainrot') {
-    return 'wordsPerImageBrainrot.json?v=20';
+    return 'wordsPerImageBrainrot.json?v=21';
   }
 
-  return "wordsDutch.json?v=20";
+  return "wordsDutch.json?v=21";
 }
 
 /** @param {string} inputValue - The text from the input field. **/
@@ -76,10 +75,6 @@ export function getWordAndImage(item) {
 }
 
 export function getAndShowNewWord() {
-  if (activeWordIndex >= wordItems.length) {
-    activeWordIndex = 0;
-  }
-
   const {word, image} = getWordAndImage(wordItems[activeWordIndex]);
 
   if (getMode() === 'brainrot' && activeWordIndex > 0) {
@@ -96,14 +91,19 @@ export function getAndShowNewWord() {
     doSixSevenAnimation();
   }
 
-  const {image: nextImage} = wordItems[activeWordIndex + 1];
-  nextImage && preloadImage(nextImage);
+  const nextWordItem = wordItems[activeWordIndex + 1];
+  if (nextWordItem) {
+    preloadImage(nextWordItem.image);
+  }
 
   /** We also set two random Hues **/
   el.body.style.setProperty("--randomHue1", getRandomHue());
   el.body.style.setProperty("--randomHue2", getRandomHue());
 
   activeWordIndex++;
+  if (activeWordIndex === wordItems.length) {
+    activeWordIndex = 0;
+  }
 }
 
 /**

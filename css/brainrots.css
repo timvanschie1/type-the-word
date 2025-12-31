@@ -31,6 +31,11 @@
         filter: drop-shadow(1px 1px 1px rgb(0 0 0 / 40%));
         background: rgba(0 0 0 / 0.1);
 
+        &.brainrot-card--level-up-animation {
+            animation: 1s levelUpAnimation linear alternate;
+            /*animation-iteration-count: 3;*/
+        }
+
         & img[src=""] {
             display: none;
         }
@@ -41,5 +46,11 @@
             object-fit: contain;
             filter: drop-shadow(1px 1px 1px rgb(0 0 0 / 60%));
         }
+    }
+}
+
+@keyframes levelUpAnimation {
+    to {
+        background: rgba(255 255 255 / 0.1);
     }
 }
