@@ -23,9 +23,12 @@ export function renderBrainrots(scoredBrainrots, allBrainrotItems, justScoredBra
 
     if (scoredBrainrots.includes(brainrot)) {
       const img = clone.querySelector('img');
-      img.style.viewTransitionName = brainrot.replace('.', '-');
       img.dataset.image = brainrot;
       img.src = getImageSrc(brainrot);
+
+      if (brainrot === justScoredBrainrot) {
+        img.style.viewTransitionName = brainrot.replace('.', '-');
+      }
     }
 
     containerEl.appendChild(clone);

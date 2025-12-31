@@ -1,12 +1,12 @@
 import {renderBrainrots} from "./brainrot.js";
 import {getMode} from "./mode.js";
 import {getEl} from "./elements.js";
-import {getWordItems} from "./word.js";
+import {getWordItems, shuffleWordItems} from "./word.js";
 
 const HIGH_SCORE_KEY = {
-  standard: 'type-the-word-high-score-4',
-  youngKids: 'type-the-word-high-score-young-kids-4',
-  brainrot: 'type-the-word-high-score-brainrot-4'
+  standard: 'type-the-word-high-score-7',
+  youngKids: 'type-the-word-high-score-young-kids-7',
+  brainrot: 'type-the-word-high-score-brainrot-7'
 }
 
 /** @typedef {string} ImgString**/
@@ -82,6 +82,7 @@ export function increaseScore() {
     if (isBrainrotsComplete) {
       scoreObj.score = [];
       scoreObj.level++;
+      shuffleWordItems();
       renderBrainrots(scoreObj.score, getWordItems());
     } else {
       scoreObj.score.push(brainrot);

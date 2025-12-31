@@ -7,7 +7,7 @@ const TIME_CONFIG = {
   youngKids: 300,
   standard: 60,
   bonusMultiplier: 0.9,
-  levelDifficultyScale: 0.1, // How much the bonus decreases per level
+  levelDifficultyScale: 0.05, // How much the bonus decreases per level
 };
 
 let secondsLeft = 0;

@@ -12,7 +12,12 @@ import {getEl} from "./elements.js";
  */
 
 /** @type {WordItem[]} */
+let originalWordItems = [];
+
+/** @type {WordItem[]} */
 let wordItems = [];
+
+let activeWordIndex = 0;
 
 const el = getEl();
 
@@ -20,11 +25,16 @@ export function getWordItems() {
   return wordItems;
 }
 
+export function shuffleWordItems() {
+  activeWordIndex = 0;
+  wordItems = getShuffledArray(originalWordItems, getMode() === 'brainrot' ? 40 : undefined);
+}
+
 export async function loadWordItems() {
   try {
     const response = await fetch(getWordsFileName());
-    const data = await response.json();
-    wordItems = getShuffledArray(data);
+    originalWordItems = await response.json();
+    shuffleWordItems();
     return true;
   } catch (error) {
     console.error("Failed to load words:", error);
@@ -36,14 +46,14 @@ export function getWordsFileName() {
   const mode = getMode();
 
   if (mode === 'youngKids') {
-    return 'wordsPerImageYoungKids.json?v=18';
+    return 'wordsPerImageYoungKids.json?v=19';
   }
 
   if (mode === 'brainrot') {
-    return 'wordsPerImageBrainrot.json?v=18';
+    return 'wordsPerImageBrainrot.json?v=19';
   }
 
-  return "wordsDutch.json?v=18";
+  return "wordsDutch.json?v=19";
 }
 
 /** @param {string} inputValue - The text from the input field. **/
@@ -65,25 +75,16 @@ export function getWordAndImage(item) {
   return {word: item.word, image: item.image}
 }
 
-let index = 0;
-
-export function resetWordIndex() {
-  index = 0;
-}
-
 export function getAndShowNewWord() {
-  const {word, image} = getWordAndImage(wordItems[index]);
+  if (activeWordIndex >= wordItems.length) {
+    activeWordIndex = 0;
+  }
 
-  if (getMode() === 'brainrot' && index > 0) {
+  const {word, image} = getWordAndImage(wordItems[activeWordIndex]);
+
+  if (getMode() === 'brainrot' && activeWordIndex > 0) {
     increaseSecondsBasedOnWord(word);
   }
-
-  if (word.includes('six seven')) {
-    doSixSevenAnimation();
-  }
-
-  const {image: nextImage} = wordItems[index + 1];
-  nextImage && preloadImage(nextImage);
 
   el.word.setAttribute('data-current-word', word);
 
@@ -91,22 +92,35 @@ export function getAndShowNewWord() {
     renderImage(image);
   }
 
+  if (word.includes('six seven')) {
+    doSixSevenAnimation();
+  }
+
+  const {image: nextImage} = wordItems[activeWordIndex + 1];
+  nextImage && preloadImage(nextImage);
+
   /** We also set two random Hues **/
   el.body.style.setProperty("--randomHue1", getRandomHue());
   el.body.style.setProperty("--randomHue2", getRandomHue());
 
-  index = index < wordItems.length - 1 ? index + 1 : 0;
+  activeWordIndex++;
 }
 
 /**
  * @param {Array} arr - The original array to shuffle.
+ * @param {number} [sliceEnd] - The original array to shuffle.
  * @returns {Array} A new array with elements in random order.
  */
-export function getShuffledArray(arr) {
-  const a = arr.slice();
+export function getShuffledArray(arr, sliceEnd) {
+  const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [a[i], a[j]] = [a[j], a[i]];
   }
+
+  if (sliceEnd) {
+    return a.slice(0, sliceEnd);
+  }
+
   return a;
 }

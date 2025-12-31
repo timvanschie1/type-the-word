@@ -4,7 +4,7 @@ import {
   getWordItems,
   isWordTyped,
   loadWordItems,
-  resetWordIndex
+  shuffleWordItems
 } from "./utils/word.js";
 import {startCountDown} from "./utils/countdown.js";
 import {handleHighScoreBeforeUnload, increaseScore, initHighScore, resetScore} from "./utils/score.js";
@@ -49,9 +49,9 @@ el.modeRadioButtons.forEach(el => {
 });
 
 function reset() {
-  resetWordIndex();
   startCountDown();
   resetScore();
+  shuffleWordItems();
   renderBrainrots([], getWordItems());
   getAndShowNewWord();
 
