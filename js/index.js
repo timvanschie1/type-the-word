@@ -57,8 +57,8 @@ function reset() {
   startCountDown();
   resetScore();
   shuffleWordItems();
+  getAndShowNewWord(true);
   renderBrainrots();
-  getAndShowNewWord();
 
   el.countDownContainer.classList.remove('hidden');
   el.scoreContainer.classList.remove('hidden');

@@ -3,9 +3,9 @@ import {getEl} from "./elements.js";
 import {getWordItems} from "./word.js";
 
 const HIGH_SCORE_KEY = {
-  standard: 'type-the-word-high-score-10',
-  youngKids: 'type-the-word-high-score-young-kids-10',
-  brainrot: 'type-the-word-high-score-brainrot-10'
+  standard: 'type-the-word-high-score-11',
+  youngKids: 'type-the-word-high-score-young-kids-11',
+  brainrot: 'type-the-word-high-score-brainrot-11'
 }
 
 /** @typedef {string} ImgString**/

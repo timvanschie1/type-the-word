@@ -26,7 +26,7 @@ export function getWordItems() {
 }
 
 export function shuffleWordItems() {
-  wordItems = getShuffledArray(originalWordItems, getMode() === 'brainrot' ? 40 : undefined);
+  wordItems = getShuffledArray(originalWordItems, getMode() === 'brainrot' ? 30 : undefined);
 }
 
 export async function loadWordItems() {
@@ -45,14 +45,14 @@ export function getWordsFileName() {
   const mode = getMode();
 
   if (mode === 'youngKids') {
-    return 'wordsPerImageYoungKids.json?v=21';
+    return 'wordsPerImageYoungKids.json?v=23';
   }
 
   if (mode === 'brainrot') {
-    return 'wordsPerImageBrainrot.json?v=21';
+    return 'wordsPerImageBrainrot.json?v=23';
   }
 
-  return "wordsDutch.json?v=21";
+  return "wordsDutch.json?v=23";
 }
 
 /** @param {string} inputValue - The text from the input field. **/
@@ -74,7 +74,14 @@ export function getWordAndImage(item) {
   return {word: item.word, image: item.image}
 }
 
-export function getAndShowNewWord() {
+/**
+ * @param {boolean} isAfterReset - The raw data from the word list.
+ */
+export function getAndShowNewWord(isAfterReset = false) {
+  if (isAfterReset) {
+    activeWordIndex = 0;
+  }
+
   const {word, image} = getWordAndImage(wordItems[activeWordIndex]);
 
   if (getMode() === 'brainrot' && activeWordIndex > 0) {

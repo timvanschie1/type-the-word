@@ -32,8 +32,7 @@
         background: rgba(0 0 0 / 0.1);
 
         &.brainrot-card--level-up-animation {
-            animation: 1s levelUpAnimation linear alternate;
-            /*animation-iteration-count: 3;*/
+            animation: 1s levelUpAnimation ease-out;
         }
 
         & img[src=""] {
@@ -50,7 +49,7 @@
 }
 
 @keyframes levelUpAnimation {
-    to {
-        background: rgba(255 255 255 / 0.1);
+    50% {
+        background: white;
     }
 }
