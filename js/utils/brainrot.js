@@ -29,6 +29,7 @@ export function renderBrainrots(justScoredBrainrot) {
       const img = clone.querySelector('img');
       img.dataset.image = brainrot;
       img.src = getImageSrc(brainrot);
+      img.title = brainrot.replace('.webp', '').replace('-', ' ');
 
       if (brainrot === justScoredBrainrot) {
         img.style.viewTransitionName = brainrot.replace('.', '-');
